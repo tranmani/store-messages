@@ -1,0 +1,33 @@
+# Builds store-messages.zip (the plugin folder at the root of the archive, as
+# WordPress expects) and attaches it to every published release. The plugin's
+# updater installs this asset.
+name: Release package
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the plugin version matches the tag
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          grep -q "Version:           $tag" store-messages.php || { echo "Plugin header version does not match tag $tag"; exit 1; }
+
+      - name: Build zip
+        run: |
+          mkdir -p build/store-messages
+          rsync -a --exclude .git --exclude .github --exclude .claude --exclude build --exclude docs ./ build/store-messages/
+          cd build && zip -qr ../store-messages.zip store-messages
+
+      - name: Attach to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" store-messages.zip --clobber
