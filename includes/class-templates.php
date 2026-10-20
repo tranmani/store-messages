@@ -161,6 +161,39 @@ HTML;
 					. "\n" . $p( __( 'Order #{order_number} · placed {order_date}', 'store-messages' ), 'margin:0;font-size:13px;color:#71717a' ),
 				'system'      => true,
 			],
+			'welcome' => [
+				'name'        => __( 'Welcome (new subscriber)', 'store-messages' ),
+				'description' => __( 'Sent automatically to new subscribers, with their personal code.', 'store-messages' ),
+				'subject'     => __( 'Welcome to {site_name}{if coupon_code}: your {coupon_amount} code{/if}', 'store-messages' ),
+				'heading'     => __( 'Thanks for signing up!', 'store-messages' ),
+				'preheader'   => '{if coupon_code}' . __( 'Your personal code for {coupon_amount} off your first order is inside.', 'store-messages' ) . '{else}' . __( 'Good to have you with us.', 'store-messages' ) . '{/if}',
+				'body'        => $p( '{if first_name}' . __( 'Hi {first_name},', 'store-messages' ) . '{else}' . __( 'Hello,', 'store-messages' ) . '{/if}' )
+					. $p( __( 'Welcome to {site_name}! From now on you are the first to hear about new products and offers.', 'store-messages' ), 'margin:0 0 20px' )
+					. "\n{if coupon_code}\n" . $card(
+						__( 'Your personal code', 'store-messages' ),
+						'<p style="margin:4px 0 6px;font-size:26px;line-height:1.2;font-weight:700;letter-spacing:.04em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">{coupon_code}</p>' . "\n"
+						. '<p style="margin:0 0 16px;font-size:14px;color:#71717a">' . __( '{coupon_amount} off your first order{if coupon_expires}, valid until {coupon_expires}{/if}. Enter it at checkout.', 'store-messages' ) . "</p>\n"
+						. $button( '{shop_url}', __( 'Start shopping', 'store-messages' ), '0' )
+					) . "{/if}\n"
+					. "\n{if !coupon_code}\n" . $button( '{shop_url}', __( 'Start shopping', 'store-messages' ) ) . "{/if}\n"
+					. "\n" . '<h3 style="margin:28px 0 12px;font-size:15px">' . __( 'Our bestsellers', 'store-messages' ) . "</h3>\n{bestsellers}\n"
+					. $sign,
+				'system'      => true,
+				'marketing'   => true,
+			],
+			'confirm_subscription' => [
+				'name'        => __( 'Confirm subscription', 'store-messages' ),
+				'description' => __( 'Sent when double opt-in is on: the link that confirms the sign-up.', 'store-messages' ),
+				'subject'     => __( 'Please confirm your subscription to {site_name}', 'store-messages' ),
+				'heading'     => __( 'One more step', 'store-messages' ),
+				'preheader'   => __( 'Confirm your email address to start receiving our news.', 'store-messages' ),
+				'body'        => $p( '{if first_name}' . __( 'Hi {first_name},', 'store-messages' ) . '{else}' . __( 'Hello,', 'store-messages' ) . '{/if}' )
+					. $p( __( 'Please confirm that you want to receive emails from {site_name}.', 'store-messages' ), 'margin:0 0 20px' )
+					. $button( '{confirm_url}', __( 'Yes, subscribe me', 'store-messages' ) )
+					. $p( __( 'If you did not sign up, simply ignore this email: you will not hear from us.', 'store-messages' ), 'margin:0;font-size:13px;color:#71717a' ),
+				'system'      => true,
+				'marketing'   => true,
+			],
 		];
 	}
 

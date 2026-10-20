@@ -1,11 +1,11 @@
 === Store Messages ===
 Contributors: storemessages
-Tags: woocommerce, email, tracking, order notes, email templates
+Tags: woocommerce, email, tracking, newsletter, email templates
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ WooCommerce's "Note to customer" email is the usual way to send a tracking link,
 * **Tracking for customers** — shown on the order in My account and in WooCommerce's own emails.
 * **A record of everything** — each send becomes a private order note, appears in the order's history and on the Activity tab.
 * **Carriers** — Swiss Post, La Poste/Colissimo, DHL, DPD, GLS, UPS, FedEx, PostNL, Poste Italiane, Correos, InPost, Royal Mail, USPS and a universal tracker; edit or add your own.
+* **Newsletters** — a subscriber list (checkout checkbox, My account, a sign-up popup and a shortcode), campaigns in the same layout with product cards, sent in batches your mail server accepts, and one-click unsubscribe.
+* **Welcome code** — new subscribers get a welcome email with their own single-use code (for example 10% off the first order).
+* **Moving from MailPoet** — import its subscribers; their old unsubscribe links keep working.
 * **Delivery** — sends through `wp_mail()`, so your SMTP or email-delivery plugin applies. Plain-text alternative included.
 * Updates from GitHub through WordPress's normal "Update now".
 
@@ -50,6 +53,16 @@ Yes. Administrators keep their HTML exactly as written; other users are limited 
 Use the `stms_update_repository` filter, or turn update checks off on the Settings tab.
 
 == Changelog ==
+
+= 1.2.0 =
+* Newsletters: a subscriber list with Campaigns, Subscribers and Sign-up tabs. Write a campaign in the same layout as your other emails, preview it, send yourself a test, then send it now or schedule it. It goes out in batches (25 every 5 minutes by default) and skips anyone who unsubscribed in the meantime.
+* `{bestsellers}` and `{products:12,34}` add product cards to any email.
+* Ways to subscribe: a checkbox at checkout and in My account, a sign-up popup (bottom sheet on phones, waits for the cookie banner) and the `[store_messages_signup]` shortcode. Optional double opt-in.
+* Welcome email with a personal, single-use code: amount, validity, first order only and "not with other codes" are set on the Sign-up tab.
+* Every marketing email has an unsubscribe link and List-Unsubscribe (one-click) headers. The unsubscribe page asks before acting, so link scanners cannot unsubscribe people.
+* Import from MailPoet: status carries over and old MailPoet unsubscribe links keep working after MailPoet is removed.
+* Export subscribers as CSV; subscribers are included in WordPress's personal data export and erasure.
+* Deleting the plugin keeps the subscriber list unless `STMS_REMOVE_ALL_DATA` is defined.
 
 = 1.1.0 =
 * WooCommerce's own emails (order received, processing, completed, refunded, new account, password reset, the emails to you…) now use the Store Messages layout: same logo, card, colours and footer. Their wording stays WooCommerce's. Product images are shown in the order table.

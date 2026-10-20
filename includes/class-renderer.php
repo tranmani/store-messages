@@ -18,10 +18,10 @@ defined( 'ABSPATH' ) || exit;
 class Renderer {
 
 	/** Placeholders whose value is already HTML (everything else is escaped). */
-	const HTML = [ 'order_items', 'message', 'note', 'shipping_address', 'billing_address', 'content', 'footer' ];
+	const HTML = [ 'order_items', 'message', 'note', 'shipping_address', 'billing_address', 'content', 'footer', 'bestsellers' ];
 
 	/** Placeholders whose value is a URL. */
-	const URLS = [ 'tracking_url', 'order_url', 'payment_url', 'site_url', 'shop_url', 'account_url', 'review_url', 'logo' ];
+	const URLS = [ 'tracking_url', 'order_url', 'payment_url', 'site_url', 'shop_url', 'account_url', 'review_url', 'logo', 'unsubscribe_url', 'confirm_url' ];
 
 	/** Documented placeholders: [name => description], shown next to the editors. */
 	public static function reference() {
@@ -55,6 +55,15 @@ class Renderer {
 				'message'      => __( 'Your personal message from the order screen (HTML)', 'store-messages' ),
 				'note'         => __( 'The note text, in the "Note to customer" template (HTML)', 'store-messages' ),
 				'note_excerpt' => __( 'First line of the note', 'store-messages' ),
+			],
+			__( 'Subscribers', 'store-messages' ) => [
+				'unsubscribe_url' => __( 'Unsubscribe link (added to the footer automatically)', 'store-messages' ),
+				'confirm_url'     => __( 'Confirm-subscription link (double opt-in)', 'store-messages' ),
+				'coupon_code'     => __( 'Personal welcome code, created on first use', 'store-messages' ),
+				'coupon_amount'   => __( 'Discount of that code, e.g. 10%', 'store-messages' ),
+				'coupon_expires'  => __( 'Date the code expires', 'store-messages' ),
+				'bestsellers'     => __( 'Your four best-selling products (HTML)', 'store-messages' ),
+				'products:12,34'  => __( 'Chosen products by ID (HTML)', 'store-messages' ),
 			],
 			__( 'Store', 'store-messages' ) => [
 				'site_name'     => __( 'Store name', 'store-messages' ),
@@ -153,6 +162,11 @@ class Renderer {
 			'payment_url'      => $ctx['account_url'],
 			'refund_amount'    => wp_strip_all_tags( html_entity_decode( wc_price( 12 ), ENT_QUOTES ) ),
 			'refund_reason'    => __( 'Item out of stock', 'store-messages' ),
+			'unsubscribe_url'  => $ctx['unsubscribe_url'] ?? '',
+			'confirm_url'      => $ctx['site_url'],
+			'coupon_code'      => 'ab3k-7xq2mz-p9tw',
+			'coupon_amount'    => Coupons::amount_text(),
+			'coupon_expires'   => Coupons::expiry_text( '' ),
 		] );
 	}
 
@@ -228,7 +242,60 @@ class Renderer {
 	}
 
 	public static function text( $template, array $ctx, $plain = false ) {
-		return self::placeholders( self::conditionals( (string) $template, $ctx ), $ctx, $plain );
+		return self::placeholders( self::blocks( self::conditionals( (string) $template, $ctx ), $plain ), $ctx, $plain );
+	}
+
+	/** {bestsellers} and {products:12,34}: product cards, built only when a template uses them. */
+	public static function blocks( $text, $plain = false ) {
+		if ( false === strpos( $text, '{bestsellers}' ) && false === strpos( $text, '{products:' ) ) {
+			return $text;
+		}
+		$text = str_replace( '{bestsellers}', $plain ? '' : self::products_html( self::bestseller_ids() ), $text );
+		return (string) preg_replace_callback( '/\{products:([0-9 ,]+)\}/', static fn( $m ) => $plain ? '' : self::products_html( array_map( 'absint', explode( ',', $m[1] ) ) ), $text );
+	}
+
+	public static function bestseller_ids( $limit = 4 ) {
+		$hidden = function_exists( 'wc_get_product_visibility_term_ids' ) ? array_filter( [ wc_get_product_visibility_term_ids()['exclude-from-catalog'] ?? 0, wc_get_product_visibility_term_ids()['outofstock'] ?? 0 ] ) : [];
+		$query  = new \WP_Query( [
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => $limit,
+			'meta_key'       => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery
+			'orderby'        => 'meta_value_num',
+			'order'          => 'DESC',
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+			'tax_query'      => $hidden ? [ [ 'taxonomy' => 'product_visibility', 'field' => 'term_taxonomy_id', 'terms' => $hidden, 'operator' => 'NOT IN' ] ] : [], // phpcs:ignore WordPress.DB.SlowDBQuery
+		] );
+		return array_map( 'intval', $query->posts );
+	}
+
+	/** Two product cards per row: image, name, price and a link. Works without media queries. */
+	public static function products_html( array $ids ) {
+		$cards = [];
+		foreach ( array_filter( $ids ) as $id ) {
+			$product = wc_get_product( $id );
+			if ( ! $product || 'publish' !== $product->get_status() ) {
+				continue;
+			}
+			$image   = wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_thumbnail' );
+			$url     = $product->get_permalink();
+			$price   = wp_strip_all_tags( html_entity_decode( $product->get_price_html(), ENT_QUOTES ) );
+			$cards[] = '<td width="50%" valign="top" style="padding:0 6px 12px">'
+				. '<a href="' . esc_url( $url ) . '" style="text-decoration:none;color:inherit">'
+				. ( $image ? '<img src="' . esc_url( $image ) . '" width="250" alt="" style="display:block;width:100%;max-width:250px;height:auto;border:0;border-radius:10px;margin:0 0 10px">' : '' )
+				. '<span style="display:block;font-size:14px;line-height:1.4;font-weight:600">' . esc_html( $product->get_name() ) . '</span>'
+				. ( '' !== trim( $price ) ? '<span style="display:block;font-size:13px;color:#71717a;margin-top:2px">' . esc_html( trim( preg_replace( '/\s+/', ' ', $price ) ) ) . '</span>' : '' )
+				. '</a></td>';
+		}
+		if ( ! $cards ) {
+			return '';
+		}
+		$rows = '';
+		foreach ( array_chunk( $cards, 2 ) as $pair ) {
+			$rows .= '<tr>' . implode( '', $pair ) . ( 1 === count( $pair ) ? '<td width="50%" style="padding:0 6px 12px"></td>' : '' ) . '</tr>';
+		}
+		return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0">' . $rows . '</table>';
 	}
 
 	/**
@@ -243,6 +310,10 @@ class Renderer {
 		$subject = html_entity_decode( self::text( $tpl['subject'] ?? '', $ctx, true ), ENT_QUOTES, 'UTF-8' );
 		$content = self::text( $tpl['body'] ?? '', $ctx );
 		$footer  = '' !== trim( (string) $brand['footer'] ) ? $brand['footer'] : Templates::default_footer();
+		if ( ! empty( $ctx['unsubscribe_url'] ) && false === strpos( $footer, '{unsubscribe_url}' ) ) {
+			// Marketing email must always carry an unsubscribe link, whatever the footer says.
+			$footer .= '<br><a href="{unsubscribe_url}" style="color:#71717a">' . esc_html__( 'Unsubscribe', 'store-messages' ) . '</a>';
+		}
 		$wrap    = $ctx + [
 			'subject'    => $subject,
 			'heading'    => html_entity_decode( self::text( $tpl['heading'] ?? '', $ctx, true ), ENT_QUOTES, 'UTF-8' ),

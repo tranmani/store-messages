@@ -103,6 +103,8 @@
 		const orderSel = $('[data-stms-preview-order]', panel);
 		const tplSel = $('[data-stms-preview-template]', form);
 		const kind = form.dataset.stmsEditor;
+		const previewAction = form.dataset.stmsPreviewAction || 'stms_preview';
+		const testAction = form.dataset.stmsTestAction || 'stms_test';
 
 		const collect = () => {
 			editors.forEach((cm) => cm.save());
@@ -116,7 +118,7 @@
 
 		const refresh = () => {
 			panel.classList.add('is-loading');
-			post('stms_preview', collect())
+			post(previewAction, collect())
 				.then((res) => {
 					subject.textContent = res.subject;
 					showHtml(frame, res.html);
@@ -137,6 +139,16 @@
 			}
 		});
 		[orderSel, tplSel].forEach((el) => el && el.addEventListener('change', refresh));
+
+		// Campaigns: how many subscribers the chosen audience reaches.
+		const countEl = $('[data-stms-audience-count]', form);
+		$$('[data-stms-audience]', form).forEach((sel) =>
+			sel.addEventListener('change', () => {
+				post('stms_audience_count', collect())
+					.then((res) => (countEl.textContent = res.message))
+					.catch((err) => (countEl.textContent = err.message));
+			})
+		);
 		$$('[data-stms-device]', panel).forEach((r) => r.addEventListener('change', () => panel.classList.toggle('is-mobile', r.value === 'mobile' && r.checked)));
 
 		const testBtn = $('[data-stms-test]', panel);
@@ -147,7 +159,7 @@
 				data.set('to', $('[data-stms-test-to]', panel).value);
 				testBtn.disabled = true;
 				status(st, t('sending'));
-				post('stms_test', data)
+				post(testAction, data)
 					.then((res) => status(st, res.message, 'ok'))
 					.catch((err) => status(st, err.message, 'error'))
 					.finally(() => (testBtn.disabled = false));
@@ -162,8 +174,18 @@
 
 	document.addEventListener('click', (e) => {
 		const confirmBtn = e.target.closest('[data-stms-confirm]');
-		if (confirmBtn && !window.confirm(t(confirmBtn.dataset.stmsConfirm === 'delete' ? 'confirmDelete' : 'confirmReset'))) {
-			e.preventDefault();
+		if (confirmBtn) {
+			const kind = confirmBtn.dataset.stmsConfirm;
+			const count = $('[data-stms-audience-count]');
+			const texts = {
+				delete: t('confirmDelete'),
+				reset: t('confirmReset'),
+				schedule: t('confirmSchedule'),
+				cancel: t('confirmCancel'),
+				resubscribe: t('confirmResubscribe'),
+				campaign: fmt(t('confirmCampaign'), count ? count.textContent.replace(/\.$/, '').toLowerCase() : ''),
+			};
+			if (!window.confirm(texts[kind] || t('confirmReset'))) e.preventDefault();
 		}
 
 		const media = e.target.closest('[data-stms-media]');

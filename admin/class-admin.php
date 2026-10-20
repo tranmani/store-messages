@@ -71,6 +71,10 @@ class Admin {
 				'close'         => __( 'Close', 'store-messages' ),
 				'subject'       => __( 'Subject', 'store-messages' ),
 				'reloading'     => __( 'Sent. Reloading…', 'store-messages' ),
+				'confirmCampaign'    => __( 'Send this campaign to %s now? This cannot be undone.', 'store-messages' ),
+				'confirmSchedule'    => __( 'Schedule this campaign for the chosen time?', 'store-messages' ),
+				'confirmCancel'      => __( 'Stop sending? Nobody else will receive it.', 'store-messages' ),
+				'confirmResubscribe' => __( 'Only subscribe people who asked for it. Subscribe this person again?', 'store-messages' ),
 			],
 		] );
 	}
@@ -80,7 +84,7 @@ class Admin {
 			return;
 		}
 		$tab = sanitize_key( $_GET['tab'] ?? 'templates' ); // phpcs:ignore WordPress.Security.NonceVerification
-		if ( in_array( $tab, [ 'templates', 'layout' ], true ) ) {
+		if ( in_array( $tab, [ 'templates', 'layout', 'campaigns' ], true ) ) {
 			$editor = wp_enqueue_code_editor( [
 				'type'       => 'text/html',
 				'codemirror' => [ 'lineWrapping' => true, 'indentUnit' => 2, 'tabSize' => 2 ],
@@ -89,8 +93,11 @@ class Admin {
 			] );
 			wp_add_inline_script( 'code-editor', 'window.stmsCodeEditor = ' . wp_json_encode( $editor ) . ';' );
 		}
-		if ( 'layout' === $tab ) {
+		if ( in_array( $tab, [ 'layout', 'signup' ], true ) ) {
 			wp_enqueue_media();
+		}
+		if ( 'signup' === $tab ) {
+			wp_enqueue_style( 'stms-signup', STMS_URL . 'assets/signup.css', [], STMS_VERSION );
 		}
 		self::enqueue_common();
 	}
@@ -99,8 +106,11 @@ class Admin {
 
 	public static function tabs() {
 		return [
-			'templates' => __( 'Templates', 'store-messages' ),
-			'layout'    => __( 'Layout', 'store-messages' ),
+			'templates'   => __( 'Templates', 'store-messages' ),
+			'campaigns'   => __( 'Campaigns', 'store-messages' ),
+			'subscribers' => __( 'Subscribers', 'store-messages' ),
+			'signup'      => __( 'Sign-up', 'store-messages' ),
+			'layout'      => __( 'Layout', 'store-messages' ),
 			'carriers'  => __( 'Carriers', 'store-messages' ),
 			'activity'  => __( 'Activity', 'store-messages' ),
 			'settings'  => __( 'Settings', 'store-messages' ),
@@ -125,7 +135,7 @@ class Admin {
 					<span class="stms-pill stms-pill--off"><?php esc_html_e( 'Customer notes use WooCommerce’s email', 'store-messages' ); ?></span>
 				<?php endif; ?>
 			</div>
-			<p class="stms-sub"><?php esc_html_e( 'Good-looking emails to your customers, sent from the order screen: tracking links, pickup notices, refunds, delays and personal messages.', 'store-messages' ); ?></p>
+			<p class="stms-sub"><?php esc_html_e( 'Good-looking emails to your customers: tracking links and personal messages from the order screen, every WooCommerce email in the same layout, and newsletters to your subscribers.', 'store-messages' ); ?></p>
 			<?php self::notices(); ?>
 			<nav class="stms-tabs" aria-label="<?php esc_attr_e( 'Sections', 'store-messages' ); ?>">
 				<?php foreach ( $tabs as $key => $label ) : ?>
@@ -145,7 +155,7 @@ class Admin {
 		}
 	}
 
-	private static function flash( $text, $type = 'success' ) {
+	public static function flash( $text, $type = 'success' ) {
 		set_transient( 'stms_notice_' . get_current_user_id(), [ 'text' => $text, 'type' => $type ], 60 );
 	}
 
@@ -158,18 +168,22 @@ class Admin {
 		return $out;
 	}
 
-	/** Preview panel: order picker, device toggle, test send, iframe. */
-	private static function preview_panel( $with_test = true ) {
-		$orders = self::recent_orders();
+	/** Preview panel: order picker (unless $with_orders is false), device toggle, test send, iframe. */
+	public static function preview_panel( $with_test = true, $with_orders = true ) {
+		$orders = $with_orders ? self::recent_orders() : [];
 		$user   = wp_get_current_user();
 		?>
 		<div class="stms-preview" data-stms-preview>
 			<div class="stms-preview__bar">
-				<label class="screen-reader-text" for="stms-preview-order"><?php esc_html_e( 'Preview with', 'store-messages' ); ?></label>
-				<select id="stms-preview-order" data-stms-preview-order>
-					<option value="0"><?php esc_html_e( 'Sample order', 'store-messages' ); ?></option>
-					<?php foreach ( $orders as $id => $label ) : ?><option value="<?php echo (int) $id; ?>"><?php echo esc_html( $label ); ?></option><?php endforeach; ?>
-				</select>
+				<?php if ( $with_orders ) : ?>
+					<label class="screen-reader-text" for="stms-preview-order"><?php esc_html_e( 'Preview with', 'store-messages' ); ?></label>
+					<select id="stms-preview-order" data-stms-preview-order>
+						<option value="0"><?php esc_html_e( 'Sample order', 'store-messages' ); ?></option>
+						<?php foreach ( $orders as $id => $label ) : ?><option value="<?php echo (int) $id; ?>"><?php echo esc_html( $label ); ?></option><?php endforeach; ?>
+					</select>
+				<?php else : ?>
+					<span class="stms-muted"><?php esc_html_e( 'Sample subscriber', 'store-messages' ); ?></span>
+				<?php endif; ?>
 				<div class="stms-segmented stms-segmented--small" role="group" aria-label="<?php esc_attr_e( 'Preview width', 'store-messages' ); ?>">
 					<label><input type="radio" name="stms_device" value="desktop" checked data-stms-device><span><?php esc_html_e( 'Desktop', 'store-messages' ); ?></span></label>
 					<label><input type="radio" name="stms_device" value="mobile" data-stms-device><span><?php esc_html_e( 'Mobile', 'store-messages' ); ?></span></label>
@@ -189,7 +203,7 @@ class Admin {
 	}
 
 	/** Clickable placeholder reference. */
-	private static function reference() {
+	public static function reference() {
 		?>
 		<details class="stms-card stms-reference">
 			<summary><h2><?php esc_html_e( 'Placeholders', 'store-messages' ); ?></h2></summary>
@@ -267,8 +281,12 @@ class Admin {
 			<input type="hidden" name="id" value="<?php echo esc_attr( (string) $id ); ?>">
 			<div class="stms-editor__main">
 				<div class="stms-card">
-					<?php if ( ! empty( $tpl['system'] ) ) : ?>
+					<?php if ( 'customer_note' === $id ) : ?>
 						<p class="stms-callout"><?php esc_html_e( 'Sent automatically when you add a “Note to customer” on an order (if enabled on the Settings tab). {note} is the text you typed; a tracking link in the note fills the tracking placeholders and is shown as a button.', 'store-messages' ); ?></p>
+					<?php elseif ( 'welcome' === $id ) : ?>
+						<p class="stms-callout"><?php echo wp_kses_post( sprintf( __( 'Sent once to every new subscriber (switch it on or off, and set the code, on the %s tab). {coupon_code} creates their personal code; the preview shows a sample one.', 'store-messages' ), '<a href="' . esc_url( self::url( 'signup' ) ) . '">' . esc_html__( 'Sign-up', 'store-messages' ) . '</a>' ) ); ?></p>
+					<?php elseif ( 'confirm_subscription' === $id ) : ?>
+						<p class="stms-callout"><?php esc_html_e( 'Sent when double opt-in is on (Sign-up tab). {confirm_url} is the link that confirms the subscription.', 'store-messages' ); ?></p>
 					<?php endif; ?>
 					<div class="stms-row">
 						<div class="stms-field">
@@ -318,6 +336,18 @@ class Admin {
 			<aside class="stms-editor__side"><?php self::preview_panel(); ?></aside>
 		</form>
 		<?php
+	}
+
+	public static function tab_campaigns() {
+		Marketing_Admin::tab_campaigns();
+	}
+
+	public static function tab_subscribers() {
+		Marketing_Admin::tab_subscribers();
+	}
+
+	public static function tab_signup() {
+		Marketing_Admin::tab_signup();
 	}
 
 	/* ------------------------------------------------------------- layout -- */
@@ -452,7 +482,7 @@ class Admin {
 				<?php $order = wc_get_order( $row['order'] ?? 0 ); ?>
 				<tr>
 					<td><?php echo esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $row['time'] ) ); ?></td>
-					<td><?php if ( $order ) : ?><a href="<?php echo esc_url( $order->get_edit_order_url() ); ?>">#<?php echo esc_html( $row['number'] ?? $row['order'] ); ?></a><?php else : ?>#<?php echo esc_html( (string) ( $row['number'] ?? '' ) ); ?><?php endif; ?></td>
+					<td><?php if ( $order ) : ?><a href="<?php echo esc_url( $order->get_edit_order_url() ); ?>">#<?php echo esc_html( $row['number'] ?? $row['order'] ); ?></a><?php elseif ( empty( $row['order'] ) ) : ?><span class="stms-muted"><?php esc_html_e( 'Subscriber', 'store-messages' ); ?></span><?php else : ?>#<?php echo esc_html( (string) ( $row['number'] ?? '' ) ); ?><?php endif; ?></td>
 					<td><strong><?php echo esc_html( $templates[ $row['template'] ]['name'] ?? ( $row['name'] ?? $row['template'] ) ); ?></strong><br><span class="stms-muted"><?php echo esc_html( $row['subject'] ); ?></span><?php if ( ! empty( $row['tracking'] ) ) : ?><br><a href="<?php echo esc_url( $row['tracking'] ); ?>" target="_blank" rel="noopener" class="stms-muted"><?php esc_html_e( 'Tracking link', 'store-messages' ); ?> ↗</a><?php endif; ?></td>
 					<td><?php echo esc_html( $row['to'] ); ?></td>
 					<td><?php echo ! empty( $row['ok'] ) ? '<span class="stms-pill stms-pill--ok">' . esc_html__( 'Sent', 'store-messages' ) . '</span>' : '<span class="stms-pill stms-pill--warn" title="' . esc_attr( $row['error'] ?? '' ) . '">' . esc_html__( 'Failed', 'store-messages' ) . '</span>'; ?></td>
@@ -642,6 +672,12 @@ class Admin {
 				$tab = 'settings';
 				self::flash( __( 'Settings saved.', 'store-messages' ) );
 				break;
+
+			default:
+				$routed = Marketing_Admin::handle( $action, $post );
+				if ( $routed ) {
+					[ $tab, $args ] = $routed;
+				}
 		}
 		wp_safe_redirect( self::url( $tab, $args ) );
 		exit;
@@ -746,6 +782,10 @@ class Admin {
 	public static function ajax_preview() {
 		self::check_ajax();
 		$req = wp_unslash( $_POST );
+		if ( Marketing_Admin::is_marketing_template( $req ) ) {
+			$mail = Marketing_Admin::preview_marketing_template( $req );
+			wp_send_json_success( [ 'subject' => $mail['subject'], 'html' => $mail['html'] ] );
+		}
 		[ $tpl, $order, $extra ] = self::request_mail( $req );
 		if ( isset( $req['brand'] ) ) {
 			// Live brand edits on the Layout tab: preview them without saving.
@@ -766,6 +806,12 @@ class Admin {
 	public static function ajax_test() {
 		self::check_ajax();
 		$req = wp_unslash( $_POST );
+		if ( Marketing_Admin::is_marketing_template( $req ) ) {
+			$to   = sanitize_email( $req['to'] ?? '' );
+			$tpl  = isset( $req['body'] ) ? array_merge( Templates::get( sanitize_key( $req['id'] ?? '' ) ) ?: [], self::template_from_post( $req ) ) : Templates::get( sanitize_key( $req['template'] ?? '' ) );
+			$sent = \StoreMessages\Marketing::send( \StoreMessages\Marketing::sample_subscriber( $to ), (array) $tpl, [ 'test' => true, 'to' => $to ] );
+			is_wp_error( $sent ) ? wp_send_json_error( [ 'message' => $sent->get_error_message() ] ) : wp_send_json_success( [ 'message' => sprintf( __( 'Test sent to %s', 'store-messages' ), $to ) ] );
+		}
 		[ $tpl, $order, $extra ] = self::request_mail( $req );
 		$result = Mailer::send( $order, $tpl, $extra + [ 'to' => sanitize_email( $req['to'] ?? '' ), 'test' => true ] );
 		is_wp_error( $result ) ? wp_send_json_error( [ 'message' => $result->get_error_message() ] ) : wp_send_json_success( [ 'message' => sprintf( __( 'Test sent to %s', 'store-messages' ), sanitize_email( $req['to'] ?? '' ) ) ] );

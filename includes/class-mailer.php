@@ -50,23 +50,12 @@ class Mailer {
 			$mail['subject'] = sprintf( __( '[Test] %s', 'store-messages' ), $mail['subject'] );
 		}
 
-		$headers = [
-			'Content-Type: text/html; charset=UTF-8',
-			sprintf( 'From: %s <%s>', self::header_name( stms_from_name() ), stms_from_email() ),
-			'Reply-To: ' . ( is_email( stms_settings()['reply_to'] ) ? stms_settings()['reply_to'] : stms_from_email() ),
-		];
-		$bcc = sanitize_email( stms_settings()['bcc'] );
+		$headers = self::headers();
+		$bcc     = sanitize_email( stms_settings()['bcc'] );
 		if ( ! $test && is_email( $bcc ) && $bcc !== $to ) {
 			$headers[] = 'Bcc: ' . $bcc;
 		}
-
-		self::$alt_body   = $mail['text'];
-		self::$last_error = '';
-		add_action( 'phpmailer_init', [ __CLASS__, 'alt_body' ], 1000 );
-		add_action( 'wp_mail_failed', [ __CLASS__, 'capture_error' ] );
-		$sent = wp_mail( $to, $mail['subject'], $mail['html'], (array) apply_filters( 'stms_email_headers', $headers, $tpl, $order ) );
-		remove_action( 'phpmailer_init', [ __CLASS__, 'alt_body' ], 1000 );
-		remove_action( 'wp_mail_failed', [ __CLASS__, 'capture_error' ] );
+		$sent = self::deliver( $to, $mail, (array) apply_filters( 'stms_email_headers', $headers, $tpl, $order ) );
 
 		if ( $test || ! $order ) {
 			return $sent ? true : new \WP_Error( 'stms_send', self::failure_text() );
@@ -95,6 +84,36 @@ class Mailer {
 		}
 		do_action( 'stms_sent', $order, $template, $args, $mail );
 		return true;
+	}
+
+	/** Content type, From and Reply-To for every Store Messages email. */
+	public static function headers() {
+		return [
+			'Content-Type: text/html; charset=UTF-8',
+			sprintf( 'From: %s <%s>', self::header_name( stms_from_name() ), stms_from_email() ),
+			'Reply-To: ' . ( is_email( stms_settings()['reply_to'] ) ? stms_settings()['reply_to'] : stms_from_email() ),
+		];
+	}
+
+	/**
+	 * Hand a rendered email ([subject, html, text]) to wp_mail with its plain-text part.
+	 *
+	 * @return bool Sent. On failure, last_error() says why.
+	 */
+	public static function deliver( $to, array $mail, array $headers ) {
+		self::$alt_body   = $mail['text'];
+		self::$last_error = '';
+		add_action( 'phpmailer_init', [ __CLASS__, 'alt_body' ], 1000 );
+		add_action( 'wp_mail_failed', [ __CLASS__, 'capture_error' ] );
+		$sent = wp_mail( $to, $mail['subject'], $mail['html'], $headers );
+		remove_action( 'phpmailer_init', [ __CLASS__, 'alt_body' ], 1000 );
+		remove_action( 'wp_mail_failed', [ __CLASS__, 'capture_error' ] );
+		self::$alt_body = '';
+		return (bool) $sent;
+	}
+
+	public static function last_error() {
+		return self::failure_text();
 	}
 
 	/** Private order note, the order's history, and the store-wide Activity list. */

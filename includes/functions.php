@@ -10,6 +10,8 @@ defined( 'ABSPATH' ) || exit;
 const STMS_SETTINGS = 'stms_settings';
 
 function stms_default_settings() {
+	// Translations may only load from "init" on (WordPress 6.7+); earlier, defaults are in English.
+	$t = did_action( 'init' ) ? static fn( $text ) => translate( $text, 'store-messages' ) : static fn( $text ) => $text;
 	return [
 		'from_name'        => '',  // empty: WooCommerce's "From" name
 		'from_email'       => '',  // empty: WooCommerce's "From" address
@@ -32,18 +34,57 @@ function stms_default_settings() {
 		],
 		'layout'           => '',  // empty: built-in layout
 		'updates'          => 1,
+		'signup'           => [
+			'double_optin'      => 0,   // confirm by email before someone counts as subscribed
+			'checkout'          => 0,   // checkbox on the checkout page
+			'checkout_position' => 'top', // top: before the terms; bottom: just above the order button
+			'checkout_label'    => $t( 'Email me offers and news (you can unsubscribe at any time)' ),
+			'account'           => 1,   // checkbox on My account → Account details
+			'account_label'     => $t( 'Email me offers and news' ),
+			'welcome'           => 1,   // send the "Welcome" template to new subscribers
+			'welcome_delay'     => 1,   // minutes
+			'popup'             => 0,
+			'popup_heading'     => $t( 'Get 10% off your first order' ),
+			'popup_text'        => $t( 'Join our newsletter and we will email you a personal code right away.' ),
+			'popup_button'      => $t( 'Send me my code' ),
+			'popup_note'        => $t( 'No spam. Unsubscribe with one click.' ),
+			'popup_image'       => '',
+			'popup_name'        => 1,   // ask for the first name too
+			'popup_delay'       => 15,  // seconds; 0 = only on scroll
+			'popup_scroll'      => 30,  // percent of the page; 0 = only after the delay
+			'popup_days'        => 7,   // closed: ask again after this many days
+			'popup_pages'       => 'all', // all | home | shop
+			'popup_langs'       => '',  // comma-separated language codes; empty: all
+			'success'           => $t( 'Thank you! Check your inbox: your code is on its way.' ),
+		],
+		'coupon'           => [
+			'enabled'        => 1,  // {coupon_code} creates a personal code
+			'type'           => 'percent', // percent | fixed_cart
+			'amount'         => 10,
+			'days'           => 30, // 0 = never expires
+			'first_order'    => 1,  // only valid when the customer has no paid order yet
+			'individual_use' => 1,  // cannot be combined with other codes
+			'restrict_email' => 0,  // only for the subscriber's own email address
+		],
+		'sending'          => [
+			'batch'    => 25, // emails per batch
+			'interval' => 5,  // minutes between batches
+		],
 	];
 }
 
 /** Settings merged over defaults; brand colours fall back to WooCommerce's email colours. */
 function stms_settings( $refresh = false ) {
-	static $settings = null;
-	if ( null === $settings || $refresh ) {
+	static $settings = null, $translated = false;
+	if ( null === $settings || $refresh || ( ! $translated && did_action( 'init' ) ) ) {
+		$translated = (bool) did_action( 'init' );
 		$saved    = get_option( STMS_SETTINGS, [] );
 		$saved    = is_array( $saved ) ? $saved : [];
 		$defaults = stms_default_settings();
 		$settings = array_merge( $defaults, $saved );
-		$settings['brand'] = array_merge( $defaults['brand'], (array) ( $saved['brand'] ?? [] ) );
+		foreach ( [ 'brand', 'signup', 'coupon', 'sending' ] as $group ) {
+			$settings[ $group ] = array_merge( $defaults[ $group ], (array) ( $saved[ $group ] ?? [] ) );
+		}
 	}
 	return $settings;
 }

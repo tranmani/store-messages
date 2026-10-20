@@ -16,6 +16,9 @@ WooCommerce's "Note to customer" email is the usual way to send a tracking link,
 - **One email instead of two**: mark the order Completed while sending, without WooCommerce's "Order complete" email on top.
 - **Tracking for customers**: shown on the order in My account and in WooCommerce's own emails.
 - **Every email looks the same**: WooCommerce's own emails (order received, completed, refunded, new account…) and WordPress's plain-text emails (password reset, new user…) are wrapped in the same layout. Each can be switched off.
+- **Newsletters**: a subscriber list (checkout checkbox, My account, a sign-up popup and a shortcode), campaigns in the same layout with product cards, batched sending and one-click unsubscribe.
+- **Welcome code**: new subscribers get a welcome email with their own single-use code, e.g. 10% off the first order.
+- **Moving from MailPoet**: import its subscribers; their old unsubscribe links keep working.
 - **A record of everything**: each send becomes a private order note, appears in the order's history and on the Activity tab.
 - **Carriers**: Swiss Post, La Poste/Colissimo, DHL, DPD, GLS, UPS, FedEx, PostNL, Poste Italiane, Correos, InPost, Royal Mail, USPS and a universal tracker; edit or add your own.
 - **Delivery**: sent through `wp_mail()`, so your SMTP or email-delivery plugin applies. Plain-text alternative included.
@@ -45,6 +48,9 @@ Requires WordPress 6.4+, PHP 8.1+ and WooCommerce. Compatible with WooCommerce's
 | `{if tracking_url}…{/if}` | Shown only when the value is not empty. |
 | `{if !message}…{/if}` | Shown only when it is empty. |
 | `{if x}…{else}…{/if}` | Either / or. Blocks can be nested. |
+| `{bestsellers}` | Four best-selling products as cards. |
+| `{products:12,34}` | These products as cards. |
+| `{coupon_code}` | In subscriber emails: the subscriber's personal code (created on first use). |
 
 The layout is a full HTML document; `{content}` is where a template's body goes, and `{heading}`, `{preheader}`, `{footer}`, `{logo}`, `{accent}`, `{background}`, `{surface}` and `{text}` are available there.
 
@@ -57,6 +63,13 @@ The layout is a full HTML document; `{content}` is where a template's body goes,
 - `stms_wc_email_styles` (filter): the CSS WooCommerce inlines into its emails inside the layout.
 - `stms_style_wp_email` (filter): return false to leave a plain-text WordPress email as it is (receives the `wp_mail()` arguments).
 - `stms_update_repository` (filter): point the updater at a fork.
+- `stms_subscribed` / `stms_unsubscribed` (actions): a subscriber row.
+- `stms_marketing_placeholders`, `stms_marketing_headers` (filters): subscriber email values and headers.
+- `stms_campaign_sent` (action): a campaign finished.
+- `stms_show_popup` (filter): show the sign-up popup on this page.
+- `stms_popup_wait_for` (filter): CSS selectors of cookie banners the popup waits for.
+- `stms_current_language` (filter): the visitor's language code.
+- `POST /wp-json/stms/v1/subscribe` with `email`, optional `name`: subscribe from your own form.
 
 ## License
 
