@@ -56,6 +56,7 @@ function stms_default_settings() {
 			'popup_pages'       => 'all', // all | home | shop
 			'popup_langs'       => '',  // comma-separated language codes; empty: all
 			'success'           => $t( 'Thank you! Check your inbox: your code is on its way.' ),
+			'brave'             => '',  // comma-separated Brave Popup ids whose forms add subscribers
 		],
 		'coupon'           => [
 			'enabled'        => 1,  // {coupon_code} creates a personal code

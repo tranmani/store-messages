@@ -40,6 +40,7 @@ class Subscribers {
 			'account'  => __( 'My account', 'store-messages' ),
 			'admin'    => __( 'Added by you', 'store-messages' ),
 			'import'   => __( 'Imported', 'store-messages' ),
+			'brave'    => __( 'Brave Popup', 'store-messages' ),
 		];
 	}
 

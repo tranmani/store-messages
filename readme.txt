@@ -5,7 +5,7 @@ Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,9 @@ Yes. Administrators keep their HTML exactly as written; other users are limited 
 Use the `stms_update_repository` filter, or turn update checks off on the Settings tab.
 
 == Changelog ==
+
+= 1.2.1 =
+* Brave Popup forms can add subscribers: tick the popups on the Sign-up tab and each sign-up joins the list and gets the welcome email with its personal code. The tab warns when a ticked popup still sends to another newsletter service inside Brave.
 
 = 1.2.0 =
 * Newsletters: a subscriber list with Campaigns, Subscribers and Sign-up tabs. Write a campaign in the same layout as your other emails, preview it, send yourself a test, then send it now or schedule it. It goes out in batches (25 every 5 minutes by default) and skips anyone who unsubscribed in the meantime.

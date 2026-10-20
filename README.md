@@ -18,6 +18,7 @@ WooCommerce's "Note to customer" email is the usual way to send a tracking link,
 - **Every email looks the same**: WooCommerce's own emails (order received, completed, refunded, new account…) and WordPress's plain-text emails (password reset, new user…) are wrapped in the same layout. Each can be switched off.
 - **Newsletters**: a subscriber list (checkout checkbox, My account, a sign-up popup and a shortcode), campaigns in the same layout with product cards, batched sending and one-click unsubscribe.
 - **Welcome code**: new subscribers get a welcome email with their own single-use code, e.g. 10% off the first order.
+- **Brave Popup**: keep your Brave popup designs; their forms can add subscribers here instead of to another newsletter service.
 - **Moving from MailPoet**: import its subscribers; their old unsubscribe links keep working.
 - **A record of everything**: each send becomes a private order note, appears in the order's history and on the Activity tab.
 - **Carriers**: Swiss Post, La Poste/Colissimo, DHL, DPD, GLS, UPS, FedEx, PostNL, Poste Italiane, Correos, InPost, Royal Mail, USPS and a universal tracker; edit or add your own.

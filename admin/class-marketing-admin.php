@@ -8,6 +8,7 @@
 namespace StoreMessages\Admin;
 
 use StoreMessages\Campaigns;
+use StoreMessages\Integrations;
 use StoreMessages\Language;
 use StoreMessages\Marketing;
 use StoreMessages\Signup;
@@ -394,6 +395,32 @@ class Marketing_Admin {
 					<?php endif; ?>
 				</div>
 
+				<?php if ( Integrations::brave_active() ) : ?>
+					<?php $popups = Integrations::brave_popups(); $connected = Integrations::brave_connected(); ?>
+					<div class="stms-card">
+						<h2><?php esc_html_e( 'Brave Popup', 'store-messages' ); ?></h2>
+						<p class="stms-hint"><?php esc_html_e( 'Keep a popup designed in Brave: its form adds the visitor here, and they get the welcome email and code. Brave still shows its own thank-you message.', 'store-messages' ); ?></p>
+						<?php if ( ! $popups ) : ?>
+							<p class="stms-muted"><?php esc_html_e( 'No Brave popup has a form yet.', 'store-messages' ); ?></p>
+						<?php else : ?>
+							<input type="hidden" name="signup[brave][]" value="0">
+							<div class="stms-field stms-switches">
+								<?php foreach ( $popups as $pid => $p ) : ?>
+									<?php
+									$on   = in_array( $pid, $connected, true );
+									$hint = 'publish' === $p['status'] ? __( 'Live', 'store-messages' ) : __( 'Not published in Brave', 'store-messages' );
+									if ( $on && $p['newsletter'] ) {
+										/* translators: %s: newsletter service, e.g. mailpoet */
+										$hint .= ' · <strong>' . esc_html( sprintf( __( 'Also sends to %s: turn off the form’s newsletter action in Brave, or visitors may see “Subscription failed” once that service is gone.', 'store-messages' ), $p['newsletter'] ) ) . '</strong>';
+									}
+									?>
+									<label><input type="checkbox" name="signup[brave][]" value="<?php echo (int) $pid; ?>" <?php checked( $on ); ?>> <span><strong><?php echo esc_html( $p['title'] ); ?></strong> <span class="stms-muted">#<?php echo (int) $pid; ?></span><br><span class="stms-muted"><?php echo wp_kses_post( $hint ); ?></span></span></label>
+								<?php endforeach; ?>
+							</div>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
+
 				<div class="stms-card">
 					<h2><?php esc_html_e( 'Welcome email and code', 'store-messages' ); ?></h2>
 					<div class="stms-field stms-switches">
@@ -560,6 +587,9 @@ class Marketing_Admin {
 				$signup[ $key ] = max( 0, absint( $in[ $key ] ?? 0 ) );
 			} elseif ( 'popup_image' === $key ) {
 				$signup[ $key ] = esc_url_raw( $in[ $key ] ?? '' );
+			} elseif ( 'brave' === $key ) {
+				$ids            = isset( $in[ $key ] ) ? (array) $in[ $key ] : Integrations::brave_connected(); // card not shown: keep the choice
+				$signup[ $key ] = implode( ',', array_unique( array_filter( array_map( 'absint', $ids ) ) ) );
 			} elseif ( 'popup_note' === $key ) {
 				$signup[ $key ] = wp_kses( (string) ( $in[ $key ] ?? '' ), [ 'a' => [ 'href' => [], 'target' => [], 'rel' => [] ] ] );
 			} else {
