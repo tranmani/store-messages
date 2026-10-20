@@ -497,6 +497,14 @@ class Admin {
 				</div>
 			</div>
 			<div class="stms-card">
+				<h2><?php esc_html_e( 'All other emails', 'store-messages' ); ?></h2>
+				<p class="stms-hint"><?php esc_html_e( 'Give the emails your site already sends the same look as your messages: logo, colours and footer from the Layout tab.', 'store-messages' ); ?></p>
+				<div class="stms-field stms-switches">
+					<label><input type="checkbox" name="style_wc_emails" value="1" <?php checked( ! empty( $s['style_wc_emails'] ) ); ?>> <span><strong><?php esc_html_e( 'WooCommerce emails', 'store-messages' ); ?></strong><br><span class="stms-muted"><?php echo wp_kses_post( sprintf( /* translators: %s: link to WooCommerce email settings */ __( 'Order received, processing, completed, refunded, new account, password reset and the emails to you. The wording stays WooCommerce’s; see them in %s.', 'store-messages' ), '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=email' ) ) . '">' . esc_html__( 'WooCommerce → Settings → Emails', 'store-messages' ) . '</a>' ) ); ?></span></span></label>
+					<label><input type="checkbox" name="style_wp_emails" value="1" <?php checked( ! empty( $s['style_wp_emails'] ) ); ?>> <span><strong><?php esc_html_e( 'WordPress emails', 'store-messages' ); ?></strong><br><span class="stms-muted"><?php esc_html_e( 'Plain-text emails such as password reset, new user and email address change. Emails another plugin already sends as HTML are left alone.', 'store-messages' ); ?></span></span></label>
+				</div>
+			</div>
+			<div class="stms-card">
 				<h2><?php esc_html_e( 'Updates', 'store-messages' ); ?></h2>
 				<div class="stms-field stms-switches">
 					<label><input type="checkbox" name="updates" value="1" <?php checked( ! empty( $s['updates'] ) ); ?>> <span><strong><?php esc_html_e( 'Check GitHub for new versions', 'store-messages' ); ?></strong><br><span class="stms-muted"><?php esc_html_e( 'New releases appear on Dashboard → Updates with the usual “Update now” button.', 'store-messages' ); ?></span></span></label>
@@ -528,7 +536,7 @@ class Admin {
 				<li><?php esc_html_e( 'Send a message from any order: pick a template, add tracking or a personal note, preview, send.', 'store-messages' ); ?></li>
 				<li><?php esc_html_e( 'Every send is recorded as a private order note and on the Activity tab.', 'store-messages' ); ?></li>
 				<li><?php esc_html_e( 'Templates and layout are plain HTML with placeholders and {if} blocks; nothing is locked.', 'store-messages' ); ?></li>
-				<li><?php esc_html_e( 'Developers: filters stms_placeholders, stms_email_html, stms_email_headers and stms_update_repository; action stms_sent.', 'store-messages' ); ?></li>
+				<li><?php esc_html_e( 'Developers: filters stms_placeholders, stms_email_html, stms_email_headers, stms_wc_email_styles, stms_style_wp_email and stms_update_repository; action stms_sent.', 'store-messages' ); ?></li>
 			</ul>
 			<p class="stms-actions"><a class="button" href="<?php echo esc_url( $repo ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'GitHub', 'store-messages' ); ?></a> <a class="button" href="<?php echo esc_url( $repo . '/issues' ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Report an issue', 'store-messages' ); ?></a></p>
 		</div>
@@ -626,6 +634,8 @@ class Admin {
 					'note_emails'    => empty( $post['note_emails'] ) ? 0 : 1,
 					'skip_completed' => empty( $post['skip_completed'] ) ? 0 : 1,
 					'show_tracking'  => empty( $post['show_tracking'] ) ? 0 : 1,
+					'style_wc_emails' => empty( $post['style_wc_emails'] ) ? 0 : 1,
+					'style_wp_emails' => empty( $post['style_wp_emails'] ) ? 0 : 1,
 					'review_url'     => esc_url_raw( $post['review_url'] ?? '' ),
 					'updates'        => empty( $post['updates'] ) ? 0 : 1,
 				] );

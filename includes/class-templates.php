@@ -272,7 +272,7 @@ HTML;
 </style>
 </head>
 <body style="margin:0;padding:0;background:{background};">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">{preheader}&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;</div>
+{if preheader}<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">{preheader}&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;</div>{/if}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{background}">
   <tr>
     <td class="stms-outer" align="center" style="padding:36px 16px">

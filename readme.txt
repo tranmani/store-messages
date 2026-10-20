@@ -5,7 +5,7 @@ Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,13 @@ Yes. Administrators keep their HTML exactly as written; other users are limited 
 Use the `stms_update_repository` filter, or turn update checks off on the Settings tab.
 
 == Changelog ==
+
+= 1.1.0 =
+* WooCommerce's own emails (order received, processing, completed, refunded, new account, password reset, the emails to you…) now use the Store Messages layout: same logo, card, colours and footer. Their wording stays WooCommerce's. Product images are shown in the order table.
+* WordPress's plain-text emails (password reset, new user, email change…) are sent as HTML in the layout, with the original text as the plain-text part.
+* Both can be switched off on the Settings tab ("All other emails").
+* Takes over from MailPoet's "use the MailPoet editor for WooCommerce emails" when both are active.
+* An empty preview line no longer hides the start of the message in the inbox list.
 
 = 1.0.0 =
 * First release.

@@ -18,6 +18,8 @@ function stms_default_settings() {
 		'note_emails'      => 1,   // send "Note to customer" through Store Messages instead of WooCommerce's email
 		'skip_completed'   => 1,   // when a message marks the order Completed, skip WooCommerce's "Order complete" email
 		'show_tracking'    => 1,   // show tracking on My account → Orders and in WooCommerce emails
+		'style_wc_emails'  => 1,   // WooCommerce's own emails use the layout
+		'style_wp_emails'  => 1,   // WordPress's plain-text emails use the layout
 		'review_url'       => '',
 		'brand'            => [
 			'logo'       => '',

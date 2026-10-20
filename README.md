@@ -15,6 +15,7 @@ WooCommerce's "Note to customer" email is the usual way to send a tracking link,
 - **Better customer notes**: "Note to customer" is sent with your layout; a tracking link pasted into a note becomes a "Track your package" button.
 - **One email instead of two**: mark the order Completed while sending, without WooCommerce's "Order complete" email on top.
 - **Tracking for customers**: shown on the order in My account and in WooCommerce's own emails.
+- **Every email looks the same**: WooCommerce's own emails (order received, completed, refunded, new account…) and WordPress's plain-text emails (password reset, new user…) are wrapped in the same layout. Each can be switched off.
 - **A record of everything**: each send becomes a private order note, appears in the order's history and on the Activity tab.
 - **Carriers**: Swiss Post, La Poste/Colissimo, DHL, DPD, GLS, UPS, FedEx, PostNL, Poste Italiane, Correos, InPost, Royal Mail, USPS and a universal tracker; edit or add your own.
 - **Delivery**: sent through `wp_mail()`, so your SMTP or email-delivery plugin applies. Plain-text alternative included.
@@ -53,6 +54,8 @@ The layout is a full HTML document; `{content}` is where a template's body goes,
 - `stms_email_html` (filter): the final HTML.
 - `stms_email_headers` (filter): mail headers.
 - `stms_sent` (action): after a message is sent for an order.
+- `stms_wc_email_styles` (filter): the CSS WooCommerce inlines into its emails inside the layout.
+- `stms_style_wp_email` (filter): return false to leave a plain-text WordPress email as it is (receives the `wp_mail()` arguments).
 - `stms_update_repository` (filter): point the updater at a fork.
 
 ## License
