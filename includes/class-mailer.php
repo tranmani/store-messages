@@ -33,18 +33,17 @@ class Mailer {
 	 * @return true|\WP_Error
 	 */
 	public static function send( $order, $template, array $args = [] ) {
-		$tpl = is_array( $template ) ? $template : Templates::get( $template );
-		if ( ! $tpl ) {
-			return new \WP_Error( 'stms_template', __( 'That template no longer exists.', 'store-messages' ) );
-		}
 		$test = ! empty( $args['test'] );
 		$to   = sanitize_email( $args['to'] ?? ( $order ? $order->get_billing_email() : '' ) );
+		$extra = array_intersect_key( $args, array_flip( [ 'tracking', 'message', 'note' ] ) );
+		$built = self::build( $order, $template, $extra );
+		if ( ! $built ) {
+			return new \WP_Error( 'stms_template', __( 'That template no longer exists.', 'store-messages' ) );
+		}
 		if ( ! is_email( $to ) ) {
 			return new \WP_Error( 'stms_to', __( 'Enter a valid email address.', 'store-messages' ) );
 		}
-		$extra = array_intersect_key( $args, array_flip( [ 'tracking', 'message', 'note' ] ) );
-		$ctx   = $order ? Renderer::context( $order, $extra ) : Renderer::sample_context( $extra );
-		$mail  = Renderer::render( $tpl, $ctx );
+		[ $tpl, $ctx, $mail ] = $built;
 		if ( $test ) {
 			/* translators: %s: email subject */
 			$mail['subject'] = sprintf( __( '[Test] %s', 'store-messages' ), $mail['subject'] );
@@ -84,6 +83,30 @@ class Mailer {
 		}
 		do_action( 'stms_sent', $order, $template, $args, $mail );
 		return true;
+	}
+
+	/**
+	 * Render a template for an order in the language the customer ordered in.
+	 *
+	 * @param \WC_Order|null $order    The order (null: sample data, store language).
+	 * @param string|array   $template Template id, or a template array (editor previews).
+	 * @param array          $extra    tracking, message, note.
+	 * @param string|null    $layout   Layout HTML; defaults to the saved layout.
+	 * @return array|null [template, context, mail], or null when the template does not exist.
+	 */
+	public static function build( $order, $template, array $extra = [], $layout = null ) {
+		$lang = Language::for_order( $order );
+		return Language::run( $lang, static function () use ( $order, $template, $extra, $layout, $lang ) {
+			// Looked up inside run() so built-in templates come out in the customer's language.
+			$tpl = is_array( $template ) ? $template : Templates::get( $template );
+			if ( ! $tpl ) {
+				return null;
+			}
+			$ctx          = $order ? Renderer::context( $order, $extra ) : Renderer::sample_context( $extra );
+			$mail         = Renderer::render( Language::translate_template( $tpl, $lang ), $ctx, $layout );
+			$mail['html'] = Language::translate_html( $mail['html'], $lang );
+			return [ $tpl, $ctx, $mail ];
+		} );
 	}
 
 	/** Content type, From and Reply-To for every Store Messages email. */

@@ -1,0 +1,217 @@
+# Store Messages nl_NL translation (customer-facing email texts).
+msgid ""
+msgstr ""
+"Project-Id-Version: Store Messages 1.2.2\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: store-messages\n"
+
+msgid "Hi {first_name},"
+msgstr "Hoi {first_name},"
+
+msgid "Thank you for shopping with us,"
+msgstr "Bedankt voor het winkelen bij ons,"
+
+msgid "Tracking"
+msgstr "Track & trace"
+
+msgid "Track your package"
+msgstr "Volg je pakket"
+
+msgid "Your order"
+msgstr "Je bestelling"
+
+msgid "Your order #{order_number} is on its way"
+msgstr "Je bestelling #{order_number} is onderweg"
+
+msgid "Your order is on its way"
+msgstr "Je bestelling is onderweg"
+
+msgid "Track your package: {carrier} {tracking_number}"
+msgstr "Volg je pakket: {carrier} {tracking_number}"
+
+msgid "Good news: your order <strong>#{order_number}</strong> has been shipped and is on its way to you."
+msgstr "Goed nieuws: je bestelling <strong>#{order_number}</strong> is verzonden en is onderweg naar jou."
+
+msgid "Tracking can take up to 24 hours to show the first update."
+msgstr "Het kan tot 24 uur duren voordat de eerste track & trace-update zichtbaar is."
+
+msgid "In this parcel"
+msgstr "In dit pakket"
+
+msgid "Shipping to"
+msgstr "Verzending naar"
+
+msgid "Your order #{order_number} is ready for pickup"
+msgstr "Je bestelling #{order_number} ligt klaar om op te halen"
+
+msgid "Ready for pickup"
+msgstr "Klaar om op te halen"
+
+msgid "Your order is waiting for you at {site_name}."
+msgstr "Je bestelling ligt voor je klaar bij {site_name}."
+
+msgid "Your order <strong>#{order_number}</strong> is packed and ready for you to collect."
+msgstr "Je bestelling <strong>#{order_number}</strong> is ingepakt en ligt voor je klaar om op te halen."
+
+msgid "Pickup address"
+msgstr "Afhaaladres"
+
+msgid "Please bring your order number with you."
+msgstr "Neem je bestelnummer mee."
+
+msgid "An update about your order #{order_number}"
+msgstr "Een update over je bestelling #{order_number}"
+
+msgid "An update about your order"
+msgstr "Een update over je bestelling"
+
+msgid "One item in your order is unavailable."
+msgstr "Eén artikel uit je bestelling is niet beschikbaar."
+
+msgid "Thank you for your order <strong>#{order_number}</strong>. Unfortunately, one of the items you ordered is currently out of stock and we are unable to send it."
+msgstr "Bedankt voor je bestelling <strong>#{order_number}</strong>. Helaas is een van de bestelde artikelen momenteel niet op voorraad en kunnen we het niet versturen."
+
+msgid "We have refunded that item to your original payment method. The rest of your order is being prepared as usual."
+msgstr "We hebben het bedrag voor dat artikel terugbetaald via je oorspronkelijke betaalmethode. De rest van je bestelling wordt zoals gewoonlijk klaargemaakt."
+
+msgid "Refunded: <strong>{refund_amount}</strong>. It can take a few business days to appear on your statement."
+msgstr "Terugbetaald: <strong>{refund_amount}</strong>. Het kan een paar werkdagen duren voordat dit op je afschrift verschijnt."
+
+msgid "We are very sorry for the inconvenience. Simply reply to this email if you have any questions."
+msgstr "Onze excuses voor het ongemak. Heb je vragen? Beantwoord dan gewoon deze e-mail."
+
+msgid "Your refund for order #{order_number}"
+msgstr "Je terugbetaling voor bestelling #{order_number}"
+
+msgid "Your refund is on its way"
+msgstr "Je terugbetaling is onderweg"
+
+msgid "Refund of {refund_amount} for order #{order_number}."
+msgstr "Terugbetaling van {refund_amount} voor bestelling #{order_number}."
+
+msgid "We have processed a refund of <strong>{refund_amount}</strong> for your order <strong>#{order_number}</strong>."
+msgstr "We hebben een terugbetaling van <strong>{refund_amount}</strong> verwerkt voor je bestelling <strong>#{order_number}</strong>."
+
+msgid "Reason: {refund_reason}"
+msgstr "Reden: {refund_reason}"
+
+msgid "Depending on your bank, it can take a few business days for the money to reach your account."
+msgstr "Afhankelijk van je bank kan het een paar werkdagen duren voordat het geld op je rekening staat."
+
+msgid "Your order #{order_number} needs a little more time"
+msgstr "Je bestelling #{order_number} heeft wat meer tijd nodig"
+
+msgid "A short delay"
+msgstr "Een kleine vertraging"
+
+msgid "An update on when your order will ship."
+msgstr "Een update over wanneer je bestelling wordt verzonden."
+
+msgid "We wanted to let you know that your order <strong>#{order_number}</strong> is taking a little longer than usual to prepare."
+msgstr "We willen je laten weten dat het klaarmaken van je bestelling <strong>#{order_number}</strong> iets langer duurt dan normaal."
+
+msgid "We will send you the tracking link as soon as it ships. Thank you for your patience!"
+msgstr "Zodra je bestelling is verzonden, sturen we je de track & trace-link. Bedankt voor je geduld!"
+
+msgid "Complete your order #{order_number}"
+msgstr "Rond je bestelling #{order_number} af"
+
+msgid "Your order is waiting"
+msgstr "Je bestelling wacht op je"
+
+msgid "Finish your payment to confirm order #{order_number}."
+msgstr "Rond je betaling af om bestelling #{order_number} te bevestigen."
+
+msgid "Your order <strong>#{order_number}</strong> ({order_total}) is not paid yet. You can complete the payment securely with the button below."
+msgstr "Je bestelling <strong>#{order_number}</strong> ({order_total}) is nog niet betaald. Met de knop hieronder kun je veilig betalen."
+
+msgid "Complete payment"
+msgstr "Betaling afronden"
+
+msgid "How are you enjoying your order, {first_name}?"
+msgstr "Hoe bevalt je bestelling, {first_name}?"
+
+msgid "How did we do?"
+msgstr "Hoe hebben we het gedaan?"
+
+msgid "Your feedback helps other customers."
+msgstr "Met je feedback help je andere klanten."
+
+msgid "We hope you are enjoying your order. Would you take a minute to tell other customers what you think? It means a lot to a small business like ours."
+msgstr "We hopen dat je blij bent met je bestelling. Wil je even de tijd nemen om andere klanten te vertellen wat je ervan vindt? Voor een klein bedrijf als het onze betekent dat heel veel."
+
+msgid "Leave a review"
+msgstr "Schrijf een review"
+
+msgid "A message about your order #{order_number}"
+msgstr "Een bericht over je bestelling #{order_number}"
+
+msgid "A message from {site_name}"
+msgstr "Een bericht van {site_name}"
+
+msgid "A note about your order #{order_number}"
+msgstr "Een notitie bij je bestelling #{order_number}"
+
+msgid "A note about your order"
+msgstr "Een notitie bij je bestelling"
+
+msgid "Order #{order_number} · placed {order_date}"
+msgstr "Bestelling #{order_number} · geplaatst op {order_date}"
+
+msgid "Welcome to {site_name}{if coupon_code}: your {coupon_amount} code{/if}"
+msgstr "Welkom bij {site_name}{if coupon_code}: je code voor {coupon_amount} korting{/if}"
+
+msgid "Thanks for signing up!"
+msgstr "Bedankt voor je aanmelding!"
+
+msgid "Your personal code for {coupon_amount} off your first order is inside."
+msgstr "Je persoonlijke code voor {coupon_amount} korting op je eerste bestelling vind je in deze e-mail."
+
+msgid "Good to have you with us."
+msgstr "Fijn dat je erbij bent."
+
+msgid "Hello,"
+msgstr "Hallo,"
+
+msgid "Welcome to {site_name}! From now on you are the first to hear about new products and offers."
+msgstr "Welkom bij {site_name}! Vanaf nu hoor jij als eerste over nieuwe producten en aanbiedingen."
+
+msgid "Your personal code"
+msgstr "Je persoonlijke code"
+
+msgid "{coupon_amount} off your first order{if coupon_expires}, valid until {coupon_expires}{/if}. Enter it at checkout."
+msgstr "{coupon_amount} korting op je eerste bestelling{if coupon_expires}, geldig tot {coupon_expires}{/if}. Vul de code in bij het afrekenen."
+
+msgid "Start shopping"
+msgstr "Begin met shoppen"
+
+msgid "Our bestsellers"
+msgstr "Onze bestsellers"
+
+msgid "Please confirm your subscription to {site_name}"
+msgstr "Bevestig je inschrijving bij {site_name}"
+
+msgid "One more step"
+msgstr "Nog één stap"
+
+msgid "Confirm your email address to start receiving our news."
+msgstr "Bevestig je e-mailadres om ons nieuws te ontvangen."
+
+msgid "Please confirm that you want to receive emails from {site_name}."
+msgstr "Bevestig dat je e-mails van {site_name} wilt ontvangen."
+
+msgid "Yes, subscribe me"
+msgstr "Ja, schrijf me in"
+
+msgid "If you did not sign up, simply ignore this email: you will not hear from us."
+msgstr "Heb je je niet aangemeld? Negeer deze e-mail dan gewoon: je hoort niets meer van ons."
+
+msgid "Questions? Just reply to this email."
+msgstr "Vragen? Beantwoord gewoon deze e-mail."
+
+msgid "Unsubscribe"
+msgstr "Uitschrijven"

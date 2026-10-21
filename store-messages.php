@@ -3,7 +3,7 @@
  * Plugin Name:       Store Messages
  * Plugin URI:        https://github.com/tranmani/store-messages
  * Description:       Beautiful, customisable emails from your WooCommerce store to your customers: tracking links, pickup notices, refunds, delays and personal messages from the order screen, every WooCommerce email in the same layout, and newsletters to your subscribers. Templates and layout are plain HTML you control.
- * Version:           1.2.1
+ * Version:           1.2.2
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce
@@ -16,7 +16,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'STMS_VERSION', '1.2.1' );
+define( 'STMS_VERSION', '1.2.2' );
 define( 'STMS_FILE', __FILE__ );
 define( 'STMS_DIR', __DIR__ );
 define( 'STMS_URL', plugin_dir_url( __FILE__ ) );
@@ -46,6 +46,15 @@ if ( is_admin() ) {
 }
 
 register_activation_hook( __FILE__, [ 'StoreMessages\Database', 'install' ] );
+
+// Bundled translations are per language (de_DE); a regional locale (de_CH, fr_BE) uses its language's file.
+add_filter( 'load_textdomain_mofile', static function ( $mofile, $domain ) {
+	if ( 'store-messages' !== $domain || is_readable( $mofile ) || ! preg_match( '/-([a-z]{2,3})_[A-Za-z_]+\.mo$/', $mofile, $m ) ) {
+		return $mofile;
+	}
+	$bundled = glob( STMS_DIR . '/languages/store-messages-' . $m[1] . '_*.mo' );
+	return $bundled ? $bundled[0] : $mofile;
+}, 10, 2 );
 
 add_action( 'plugins_loaded', static function () {
 	load_plugin_textdomain( 'store-messages', false, dirname( plugin_basename( STMS_FILE ) ) . '/languages' );

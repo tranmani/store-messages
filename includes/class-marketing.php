@@ -90,11 +90,7 @@ class Marketing {
 	public static function render( $sub, array $tpl, $test = false ) {
 		$lang = (string) ( $sub->lang ?? '' );
 		return Language::run( $lang, static function () use ( $sub, $tpl, $test, $lang ) {
-			$tpl = array_merge( $tpl, [
-				'subject'   => Language::translate_text( (string) ( $tpl['subject'] ?? '' ), $lang ),
-				'heading'   => Language::translate_text( (string) ( $tpl['heading'] ?? '' ), $lang ),
-				'preheader' => Language::translate_text( (string) ( $tpl['preheader'] ?? '' ), $lang ),
-			] );
+			$tpl          = Language::translate_template( $tpl, $lang );
 			$mail         = Renderer::render( $tpl, self::context( $sub, $tpl, $test ) );
 			$mail['html'] = Language::translate_html( $mail['html'], $lang );
 			return $mail;

@@ -1,0 +1,217 @@
+# Store Messages de_DE translation (customer-facing email texts).
+msgid ""
+msgstr ""
+"Project-Id-Version: Store Messages 1.2.2\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: store-messages\n"
+
+msgid "Hi {first_name},"
+msgstr "Hallo {first_name},"
+
+msgid "Thank you for shopping with us,"
+msgstr "Danke für deinen Einkauf bei uns,"
+
+msgid "Tracking"
+msgstr "Sendungsverfolgung"
+
+msgid "Track your package"
+msgstr "Paket verfolgen"
+
+msgid "Your order"
+msgstr "Deine Bestellung"
+
+msgid "Your order #{order_number} is on its way"
+msgstr "Deine Bestellung #{order_number} ist unterwegs"
+
+msgid "Your order is on its way"
+msgstr "Deine Bestellung ist unterwegs"
+
+msgid "Track your package: {carrier} {tracking_number}"
+msgstr "Verfolge dein Paket: {carrier} {tracking_number}"
+
+msgid "Good news: your order <strong>#{order_number}</strong> has been shipped and is on its way to you."
+msgstr "Gute Nachrichten: Deine Bestellung <strong>#{order_number}</strong> wurde versandt und ist auf dem Weg zu dir."
+
+msgid "Tracking can take up to 24 hours to show the first update."
+msgstr "Bis die Sendungsverfolgung den ersten Status anzeigt, kann es bis zu 24 Stunden dauern."
+
+msgid "In this parcel"
+msgstr "In diesem Paket"
+
+msgid "Shipping to"
+msgstr "Lieferung an"
+
+msgid "Your order #{order_number} is ready for pickup"
+msgstr "Deine Bestellung #{order_number} ist abholbereit"
+
+msgid "Ready for pickup"
+msgstr "Abholbereit"
+
+msgid "Your order is waiting for you at {site_name}."
+msgstr "Deine Bestellung wartet bei {site_name} auf dich."
+
+msgid "Your order <strong>#{order_number}</strong> is packed and ready for you to collect."
+msgstr "Deine Bestellung <strong>#{order_number}</strong> ist verpackt und liegt zur Abholung für dich bereit."
+
+msgid "Pickup address"
+msgstr "Abholadresse"
+
+msgid "Please bring your order number with you."
+msgstr "Bitte bring deine Bestellnummer mit."
+
+msgid "An update about your order #{order_number}"
+msgstr "Neuigkeiten zu deiner Bestellung #{order_number}"
+
+msgid "An update about your order"
+msgstr "Neuigkeiten zu deiner Bestellung"
+
+msgid "One item in your order is unavailable."
+msgstr "Ein Artikel deiner Bestellung ist nicht verfügbar."
+
+msgid "Thank you for your order <strong>#{order_number}</strong>. Unfortunately, one of the items you ordered is currently out of stock and we are unable to send it."
+msgstr "Vielen Dank für deine Bestellung <strong>#{order_number}</strong>. Leider ist einer der bestellten Artikel derzeit nicht vorrätig, und wir können ihn nicht versenden."
+
+msgid "We have refunded that item to your original payment method. The rest of your order is being prepared as usual."
+msgstr "Wir haben dir diesen Artikel über deine ursprüngliche Zahlungsart erstattet. Der Rest deiner Bestellung wird wie gewohnt vorbereitet."
+
+msgid "Refunded: <strong>{refund_amount}</strong>. It can take a few business days to appear on your statement."
+msgstr "Erstattet: <strong>{refund_amount}</strong>. Es kann einige Werktage dauern, bis der Betrag auf deinem Kontoauszug erscheint."
+
+msgid "We are very sorry for the inconvenience. Simply reply to this email if you have any questions."
+msgstr "Wir entschuldigen uns sehr für die Unannehmlichkeiten. Bei Fragen antworte einfach auf diese E-Mail."
+
+msgid "Your refund for order #{order_number}"
+msgstr "Deine Rückerstattung für Bestellung #{order_number}"
+
+msgid "Your refund is on its way"
+msgstr "Deine Rückerstattung ist unterwegs"
+
+msgid "Refund of {refund_amount} for order #{order_number}."
+msgstr "Rückerstattung von {refund_amount} für Bestellung #{order_number}."
+
+msgid "We have processed a refund of <strong>{refund_amount}</strong> for your order <strong>#{order_number}</strong>."
+msgstr "Wir haben eine Rückerstattung von <strong>{refund_amount}</strong> für deine Bestellung <strong>#{order_number}</strong> veranlasst."
+
+msgid "Reason: {refund_reason}"
+msgstr "Grund: {refund_reason}"
+
+msgid "Depending on your bank, it can take a few business days for the money to reach your account."
+msgstr "Je nach Bank kann es einige Werktage dauern, bis das Geld auf deinem Konto ist."
+
+msgid "Your order #{order_number} needs a little more time"
+msgstr "Deine Bestellung #{order_number} braucht etwas mehr Zeit"
+
+msgid "A short delay"
+msgstr "Eine kleine Verzögerung"
+
+msgid "An update on when your order will ship."
+msgstr "Neuigkeiten zum Versand deiner Bestellung."
+
+msgid "We wanted to let you know that your order <strong>#{order_number}</strong> is taking a little longer than usual to prepare."
+msgstr "Wir möchten dich kurz informieren, dass die Vorbereitung deiner Bestellung <strong>#{order_number}</strong> etwas länger dauert als üblich."
+
+msgid "We will send you the tracking link as soon as it ships. Thank you for your patience!"
+msgstr "Sobald sie versandt ist, schicken wir dir den Link zur Sendungsverfolgung. Danke für deine Geduld!"
+
+msgid "Complete your order #{order_number}"
+msgstr "Schließe deine Bestellung #{order_number} ab"
+
+msgid "Your order is waiting"
+msgstr "Deine Bestellung wartet"
+
+msgid "Finish your payment to confirm order #{order_number}."
+msgstr "Schließe deine Zahlung ab, um die Bestellung #{order_number} zu bestätigen."
+
+msgid "Your order <strong>#{order_number}</strong> ({order_total}) is not paid yet. You can complete the payment securely with the button below."
+msgstr "Deine Bestellung <strong>#{order_number}</strong> ({order_total}) ist noch nicht bezahlt. Über den Button unten kannst du die Zahlung sicher abschließen."
+
+msgid "Complete payment"
+msgstr "Zahlung abschließen"
+
+msgid "How are you enjoying your order, {first_name}?"
+msgstr "Wie gefällt dir deine Bestellung, {first_name}?"
+
+msgid "How did we do?"
+msgstr "Wie zufrieden bist du?"
+
+msgid "Your feedback helps other customers."
+msgstr "Deine Meinung hilft anderen Kundinnen und Kunden."
+
+msgid "We hope you are enjoying your order. Would you take a minute to tell other customers what you think? It means a lot to a small business like ours."
+msgstr "Wir hoffen, deine Bestellung gefällt dir. Nimmst du dir kurz eine Minute, um anderen Kunden deine Meinung mitzuteilen? Für ein kleines Unternehmen wie unseres bedeutet das sehr viel."
+
+msgid "Leave a review"
+msgstr "Bewertung abgeben"
+
+msgid "A message about your order #{order_number}"
+msgstr "Eine Nachricht zu deiner Bestellung #{order_number}"
+
+msgid "A message from {site_name}"
+msgstr "Eine Nachricht von {site_name}"
+
+msgid "A note about your order #{order_number}"
+msgstr "Ein Hinweis zu deiner Bestellung #{order_number}"
+
+msgid "A note about your order"
+msgstr "Ein Hinweis zu deiner Bestellung"
+
+msgid "Order #{order_number} · placed {order_date}"
+msgstr "Bestellung #{order_number} · aufgegeben am {order_date}"
+
+msgid "Welcome to {site_name}{if coupon_code}: your {coupon_amount} code{/if}"
+msgstr "Willkommen bei {site_name}{if coupon_code}: dein Gutscheincode über {coupon_amount}{/if}"
+
+msgid "Thanks for signing up!"
+msgstr "Danke für deine Anmeldung!"
+
+msgid "Your personal code for {coupon_amount} off your first order is inside."
+msgstr "Hier ist dein persönlicher Code für {coupon_amount} Rabatt auf deine erste Bestellung."
+
+msgid "Good to have you with us."
+msgstr "Schön, dass du dabei bist."
+
+msgid "Hello,"
+msgstr "Hallo,"
+
+msgid "Welcome to {site_name}! From now on you are the first to hear about new products and offers."
+msgstr "Willkommen bei {site_name}! Ab sofort erfährst du als Erstes von neuen Produkten und Angeboten."
+
+msgid "Your personal code"
+msgstr "Dein persönlicher Code"
+
+msgid "{coupon_amount} off your first order{if coupon_expires}, valid until {coupon_expires}{/if}. Enter it at checkout."
+msgstr "{coupon_amount} Rabatt auf deine erste Bestellung{if coupon_expires}, gültig bis {coupon_expires}{/if}. Gib ihn einfach an der Kasse ein."
+
+msgid "Start shopping"
+msgstr "Jetzt einkaufen"
+
+msgid "Our bestsellers"
+msgstr "Unsere Bestseller"
+
+msgid "Please confirm your subscription to {site_name}"
+msgstr "Bitte bestätige deine Anmeldung bei {site_name}"
+
+msgid "One more step"
+msgstr "Nur noch ein Schritt"
+
+msgid "Confirm your email address to start receiving our news."
+msgstr "Bestätige deine E-Mail-Adresse, um unsere Neuigkeiten zu erhalten."
+
+msgid "Please confirm that you want to receive emails from {site_name}."
+msgstr "Bitte bestätige, dass du E-Mails von {site_name} erhalten möchtest."
+
+msgid "Yes, subscribe me"
+msgstr "Ja, ich möchte mich anmelden"
+
+msgid "If you did not sign up, simply ignore this email: you will not hear from us."
+msgstr "Falls du dich nicht angemeldet hast, ignoriere diese E-Mail einfach: Du hörst dann nichts mehr von uns."
+
+msgid "Questions? Just reply to this email."
+msgstr "Fragen? Antworte einfach auf diese E-Mail."
+
+msgid "Unsubscribe"
+msgstr "Abmelden"

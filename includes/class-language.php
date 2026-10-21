@@ -27,6 +27,27 @@ class Language {
 		return array_combine( $codes, $codes );
 	}
 
+	/**
+	 * Language the customer ordered in, from Overlay Multilingual or WPML order data
+	 * ("" = the store's default). Other plugins: filter stms_order_language.
+	 */
+	public static function for_order( $order ) {
+		$lang = '';
+		if ( $order instanceof \WC_Order ) {
+			$lang = (string) ( $order->get_meta( '_ovml_lang' ) ?: $order->get_meta( 'wpml_language' ) );
+		}
+		$lang = (string) apply_filters( 'stms_order_language', sanitize_key( $lang ), $order );
+		return isset( self::all()[ $lang ] ) ? $lang : '';
+	}
+
+	/** A template's one-line texts through the dictionary (built-in texts are already translated by run()). */
+	public static function translate_template( array $tpl, $lang ) {
+		foreach ( [ 'subject', 'heading', 'preheader' ] as $key ) {
+			$tpl[ $key ] = self::translate_text( (string) ( $tpl[ $key ] ?? '' ), $lang );
+		}
+		return $tpl;
+	}
+
 	public static function is_default( $lang ) {
 		return '' === (string) $lang || ( function_exists( 'ovml_is_default' ) ? ovml_is_default( $lang ) : substr( get_locale(), 0, 2 ) === $lang );
 	}

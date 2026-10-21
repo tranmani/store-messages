@@ -754,6 +754,11 @@ class Admin {
 	 * Template and context from an AJAX request: either the editor's unsaved
 	 * fields, or a saved template id; an order id or sample data.
 	 */
+	/** A saved template by id (so its built-in text is looked up in the order's language), or the edited copy. */
+	private static function posted_template( array $req, array $tpl ) {
+		return isset( $req['body'] ) || ! Templates::get( sanitize_key( $req['template'] ?? '' ) ) ? $tpl : sanitize_key( $req['template'] );
+	}
+
 	private static function request_mail( array $req ) {
 		if ( isset( $req['body'] ) ) {
 			$tpl = self::template_from_post( $req );
@@ -798,9 +803,12 @@ class Admin {
 			add_filter( 'default_option_' . STMS_SETTINGS, static fn() => [ 'brand' => $brand ] );
 			stms_settings( true );
 		}
-		$ctx  = $order ? Renderer::context( $order, $extra ) : Renderer::sample_context( $extra );
-		$mail = Renderer::render( $tpl, $ctx, isset( $req['layout'] ) ? (string) $req['layout'] : null );
-		wp_send_json_success( [ 'subject' => $mail['subject'], 'html' => $mail['html'] ] );
+		// An order's preview is in the customer's language: what they will receive.
+		$built = Mailer::build( $order, self::posted_template( $req, $tpl ), $extra, isset( $req['layout'] ) ? (string) $req['layout'] : null );
+		if ( ! $built ) {
+			wp_send_json_error( [ 'message' => __( 'That template no longer exists.', 'store-messages' ) ] );
+		}
+		wp_send_json_success( [ 'subject' => $built[2]['subject'], 'html' => $built[2]['html'] ] );
 	}
 
 	public static function ajax_test() {
@@ -813,7 +821,7 @@ class Admin {
 			is_wp_error( $sent ) ? wp_send_json_error( [ 'message' => $sent->get_error_message() ] ) : wp_send_json_success( [ 'message' => sprintf( __( 'Test sent to %s', 'store-messages' ), $to ) ] );
 		}
 		[ $tpl, $order, $extra ] = self::request_mail( $req );
-		$result = Mailer::send( $order, $tpl, $extra + [ 'to' => sanitize_email( $req['to'] ?? '' ), 'test' => true ] );
+		$result = Mailer::send( $order, self::posted_template( $req, $tpl ), $extra + [ 'to' => sanitize_email( $req['to'] ?? '' ), 'test' => true ] );
 		is_wp_error( $result ) ? wp_send_json_error( [ 'message' => $result->get_error_message() ] ) : wp_send_json_success( [ 'message' => sprintf( __( 'Test sent to %s', 'store-messages' ), sanitize_email( $req['to'] ?? '' ) ) ] );
 	}
 

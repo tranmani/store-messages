@@ -5,7 +5,7 @@ Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,10 @@ Yes. Administrators keep their HTML exactly as written; other users are limited 
 Use the `stms_update_repository` filter, or turn update checks off on the Settings tab.
 
 == Changelog ==
+
+= 1.2.2 =
+* Order messages go out in the language the customer ordered in: tracking, "Note to customer", refund, delay and every other order template, with dates, statuses and links in that language too. Previews and test sends on an order show that language. Works with Overlay Multilingual and WPML order data; other plugins can use the `stms_order_language` filter.
+* Built-in customer texts translated into French, German, Italian, Spanish, Dutch and Polish. Regional locales (de_CH, fr_BE…) use their language's translation. Templates you edited are translated through your Overlay Multilingual dictionary, as newsletters already were.
 
 = 1.2.1 =
 * Brave Popup forms can add subscribers: tick the popups on the Sign-up tab and each sign-up joins the list and gets the welcome email with its personal code. The tab warns when a ticked popup still sends to another newsletter service inside Brave.
