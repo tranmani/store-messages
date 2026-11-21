@@ -20,6 +20,7 @@ class Order_Box {
 		add_action( 'add_meta_boxes', [ __CLASS__, 'register' ], 30 );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'assets' ] );
 		add_action( 'wp_ajax_stms_send', [ __CLASS__, 'ajax_send' ] );
+		add_action( 'wp_ajax_stms_history_preview', [ __CLASS__, 'ajax_history_preview' ] );
 	}
 
 	/** Order edit screen id for both storage modes (HPOS and posts). */
@@ -109,11 +110,13 @@ class Order_Box {
 			echo '<p class="stms-box__label">' . esc_html__( 'Sent from here', 'store-messages' ) . '</p><ul>';
 			foreach ( array_slice( $log, 0, 6 ) as $row ) {
 				printf(
-					'<li class="%s"><strong>%s</strong><span>%s · %s</span></li>',
+					'<li class="%s"><strong>%s</strong><span>%s · %s</span><button type="button" class="button-link" data-stms-history-preview="%s">%s</button></li>',
 					! empty( $row['ok'] ) ? '' : 'is-failed',
 					esc_html( $row['name'] ?: $row['subject'] ),
 					esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), (int) $row['time'] ) ),
-					! empty( $row['ok'] ) ? esc_html( $row['to'] ) : esc_html__( 'failed', 'store-messages' )
+					! empty( $row['ok'] ) ? esc_html( $row['to'] ) : esc_html__( 'failed', 'store-messages' ),
+					esc_attr( Mailer::entry_key( $row ) ),
+					esc_html__( 'Preview', 'store-messages' )
 				);
 			}
 			echo '</ul>';
@@ -142,6 +145,30 @@ class Order_Box {
 		$country    = $order->get_shipping_country() ?: $order->get_billing_country();
 		$carrier    = $by_country[ $country ] ?? ( $by_country['*'] ?? '' );
 		return $carrier && Carriers::get( $carrier ) ? $carrier : (string) array_key_first( Carriers::all() );
+	}
+
+	/** The email behind a history entry: the copy kept at send time, else re-rendered from its template. */
+	public static function ajax_history_preview() {
+		check_ajax_referer( 'stms_ajax', 'nonce' );
+		if ( ! current_user_can( Admin::CAP ) ) {
+			wp_send_json_error( [ 'message' => __( 'Sorry, you are not allowed to do that.', 'store-messages' ) ], 403 );
+		}
+		$req   = wp_unslash( $_POST );
+		$order = wc_get_order( absint( $req['order'] ?? 0 ) );
+		$key   = sanitize_text_field( $req['key'] ?? '' );
+		$entry = $order ? Mailer::find_entry( $order, $key ) : null;
+		if ( ! $entry ) {
+			wp_send_json_error( [ 'message' => __( 'That message is no longer in this order’s history.', 'store-messages' ) ] );
+		}
+		$copy = Mailer::copy( $order, $key ) ?: Mailer::rebuild( $order, $entry );
+		if ( ! $copy ) {
+			wp_send_json_error( [ 'message' => __( 'No copy of this email was kept and its template no longer exists.', 'store-messages' ) ] );
+		}
+		wp_send_json_success( [
+			'subject' => $copy['subject'],
+			'html'    => $copy['html'],
+			'note'    => empty( $copy['rebuilt'] ) ? '' : __( 'Rebuilt from the template: sent before copies were kept, so it can differ from what the customer received (a personal note is not included).', 'store-messages' ),
+		] );
 	}
 
 	public static function ajax_send() {

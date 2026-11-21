@@ -237,12 +237,16 @@
 
 	/* ------------------------------------------------------ order screen -- */
 
-	function modal(subject, html) {
+	function modal(subject, html, note) {
 		const wrap = document.createElement('div');
 		wrap.className = 'stms-modal';
-		wrap.innerHTML = '<div class="stms-modal__dialog" role="dialog" aria-modal="true"><div class="stms-modal__head"><p><span></span><strong></strong></p><button type="button" class="button">' + t('close') + '</button></div><iframe title="' + t('preview') + '" sandbox="allow-same-origin"></iframe></div>';
+		wrap.innerHTML = '<div class="stms-modal__dialog" role="dialog" aria-modal="true"><div class="stms-modal__head"><p><span></span><strong></strong></p><button type="button" class="button">' + t('close') + '</button></div><p class="stms-modal__note" hidden></p><iframe title="' + t('preview') + '" sandbox="allow-same-origin"></iframe></div>';
 		$('span', wrap).textContent = t('subject');
 		$('strong', wrap).textContent = subject;
+		if (note) {
+			$('.stms-modal__note', wrap).textContent = note;
+			$('.stms-modal__note', wrap).hidden = false;
+		}
 		document.body.appendChild(wrap);
 		showHtml($('iframe', wrap), html);
 		const close = () => {
@@ -320,6 +324,17 @@
 			if (trackWrap.hidden) delete d.tracking;
 			post('stms_preview', d)
 				.then((res) => modal(res.subject, res.html))
+				.catch((err) => status(st, err.message, 'error'))
+				.finally(() => (btn.disabled = false));
+		});
+
+		// Delegated: the history list is replaced after every send.
+		box.addEventListener('click', (e) => {
+			const btn = e.target.closest('[data-stms-history-preview]');
+			if (!btn) return;
+			btn.disabled = true;
+			post('stms_history_preview', { order: box.dataset.order, key: btn.dataset.stmsHistoryPreview })
+				.then((res) => modal(res.subject, res.html, res.note))
 				.catch((err) => status(st, err.message, 'error'))
 				.finally(() => (btn.disabled = false));
 		});

@@ -5,7 +5,7 @@ Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 1.2.2
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,9 @@ Yes. Administrators keep their HTML exactly as written; other users are limited 
 Use the `stms_update_repository` filter, or turn update checks off on the Settings tab.
 
 == Changelog ==
+
+= 1.3.0 =
+* Every message in an order's "Sent from here" history has a Preview button that opens the email in the preview window. New sends keep a copy of the exact email (compressed, the last 20 per order); messages sent before 1.3.0 are rebuilt from their template with the tracking link that was sent, and the preview says so.
 
 = 1.2.2 =
 * Order messages go out in the language the customer ordered in: tracking, "Note to customer", refund, delay and every other order template, with dates, statuses and links in that language too. Previews and test sends on an order show that language. Works with Overlay Multilingual and WPML order data; other plugins can use the `stms_order_language` filter.

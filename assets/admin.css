@@ -154,8 +154,10 @@ details.stms-card[open] > summary { margin-bottom: 12px; }
 .stms-box [data-stms-box-status] { margin-top: 8px; }
 .stms-box__history { margin-top: 12px; }
 .stms-box__history ul { margin: 0; }
-.stms-box__history li { display: grid; padding: 6px 0; margin: 0; border-top: 1px solid var(--stms-line); font-size: 12px; }
+.stms-box__history li { display: grid; grid-template-columns: 1fr auto; column-gap: 8px; padding: 6px 0; margin: 0; border-top: 1px solid var(--stms-line); font-size: 12px; }
+.stms-box__history li strong, .stms-box__history li span { grid-column: 1; }
 .stms-box__history li span { color: var(--stms-muted); }
+.stms-box__history li .button-link { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-size: 12px; }
 .stms-box__history li.is-failed strong { color: var(--stms-danger); }
 .stms-box__label { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--stms-muted); margin: 0 0 4px; font-weight: 600; }
 .stms-box__foot { margin: 10px 0 0; font-size: 12px; }
@@ -167,6 +169,7 @@ details.stms-card[open] > summary { margin-bottom: 12px; }
 .stms-modal__head { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #e2e4e7; }
 .stms-modal__head p { margin: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .stms-modal__head span { color: #646970; margin-right: 6px; }
+.stms-modal__note { margin: 0; padding: 8px 16px; background: #fcf9e8; border-bottom: 1px solid #f0e6b8; font-size: 12px; }
 .stms-modal iframe { width: 100%; height: 75vh; border: 0; display: block; }
 
 /* Marketing: subscribers, campaigns, sign-up */

@@ -16,7 +16,9 @@ defined( 'ABSPATH' ) || exit;
 class Mailer {
 
 	const LOG      = '_stms_log';
+	const SENT     = '_stms_sent';
 	const ACTIVITY = 'stms_activity';
+	const COPIES   = 20;
 
 	/** True while a message is marking its order Completed (see WooCommerce::maybe_skip_completed). */
 	public static $completing = false;
@@ -61,7 +63,8 @@ class Mailer {
 		}
 
 		$tracking = (array) ( $ctx['tracking_url'] ? [ 'carrier' => $args['tracking']['carrier'] ?? '', 'name' => $ctx['carrier'], 'number' => $ctx['tracking_number'], 'url' => $ctx['tracking_url'] ] : [] );
-		self::record( $order, [
+		self::record( $order, $mail, [
+			'id'       => wp_generate_password( 12, false ),
 			'template' => is_array( $template ) ? 'custom' : $template,
 			'name'     => $tpl['name'] ?? '',
 			'subject'  => $mail['subject'],
@@ -140,7 +143,7 @@ class Mailer {
 	}
 
 	/** Private order note, the order's history, and the store-wide Activity list. */
-	private static function record( \WC_Order $order, array $entry ) {
+	private static function record( \WC_Order $order, array $mail, array $entry ) {
 		$entry += [ 'time' => time(), 'user' => get_current_user_id() ];
 		$note    = $entry['ok']
 			/* translators: 1: email subject, 2: email address */
@@ -155,6 +158,7 @@ class Mailer {
 		$log   = (array) $order->get_meta( self::LOG );
 		$log[] = $entry;
 		$order->update_meta_data( self::LOG, array_slice( $log, -50 ) );
+		self::put_copy( $order, $entry['id'], [ 'subject' => $mail['subject'], 'html' => $mail['html'] ] );
 		$order->save_meta_data();
 
 		$activity = (array) get_option( self::ACTIVITY, [] );
@@ -164,6 +168,65 @@ class Mailer {
 
 	public static function history( \WC_Order $order ) {
 		return array_reverse( array_filter( (array) $order->get_meta( self::LOG ), 'is_array' ) );
+	}
+
+	/** Stable key of a history entry. Entries from before 1.3.0 have no id; their send time identifies them. */
+	public static function entry_key( array $entry ) {
+		return ! empty( $entry['id'] ) ? (string) $entry['id'] : 't' . (int) ( $entry['time'] ?? 0 );
+	}
+
+	public static function find_entry( \WC_Order $order, $key ) {
+		foreach ( self::history( $order ) as $entry ) {
+			if ( self::entry_key( $entry ) === $key ) {
+				return $entry;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Keep a copy of an email (subject + HTML) for the order's history, compressed; the last COPIES are kept.
+	 * Does not save the order: callers run save_meta_data().
+	 *
+	 * @param array $copy subject, html, and optionally rebuilt => true when it was not captured at send time.
+	 */
+	public static function put_copy( \WC_Order $order, $key, array $copy ) {
+		$json   = wp_json_encode( $copy );
+		$copies = (array) $order->get_meta( self::SENT );
+		unset( $copies[ $key ] );
+		$copies[ $key ] = function_exists( 'gzdeflate' ) ? 'z:' . base64_encode( gzdeflate( $json, 6 ) ) : $json; // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+		$order->update_meta_data( self::SENT, array_slice( $copies, -self::COPIES, null, true ) );
+	}
+
+	/** The stored copy of a history entry's email, or null. */
+	public static function copy( \WC_Order $order, $key ) {
+		$raw = ( (array) $order->get_meta( self::SENT ) )[ $key ] ?? '';
+		if ( ! is_string( $raw ) || '' === $raw ) {
+			return null;
+		}
+		if ( 0 === strpos( $raw, 'z:' ) ) {
+			$raw = function_exists( 'gzinflate' ) ? (string) @gzinflate( (string) base64_decode( substr( $raw, 2 ) ) ) : ''; // phpcs:ignore
+		}
+		$copy = json_decode( $raw, true );
+		return is_array( $copy ) && isset( $copy['html'] ) ? $copy : null;
+	}
+
+	/**
+	 * Re-render a history entry from its template, for emails sent before copies were kept.
+	 * Uses the tracking link that was sent; a personal note was not recorded and is missing.
+	 *
+	 * @return array|null subject, html, rebuilt => true; null when the template is gone.
+	 */
+	public static function rebuild( \WC_Order $order, array $entry ) {
+		$extra = [];
+		if ( ! empty( $entry['tracking'] ) ) {
+			$extra['tracking'] = Carriers::resolve( (string) $entry['tracking'], '' );
+		}
+		$built = self::build( $order, (string) ( $entry['template'] ?? '' ), $extra );
+		if ( ! $built ) {
+			return null;
+		}
+		return [ 'subject' => (string) ( $entry['subject'] ?? $built[2]['subject'] ), 'html' => $built[2]['html'], 'rebuilt' => true ];
 	}
 
 	public static function alt_body( $phpmailer ) {
