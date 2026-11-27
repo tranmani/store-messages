@@ -16,6 +16,7 @@ WooCommerce's "Note to customer" email is the usual way to send a tracking link,
 - **One email instead of two**: mark the order Completed while sending, without WooCommerce's "Order complete" email on top.
 - **Tracking for customers**: shown on the order in My account and in WooCommerce's own emails.
 - **Every email looks the same**: WooCommerce's own emails (order received, completed, refunded, new account…) and WordPress's plain-text emails (password reset, new user…) are wrapped in the same layout. Each can be switched off.
+- **Your words in the automatic emails**: order received, on hold, complete, refunded (full or partial), payment failed, cancelled, invoice, password reset, new account, email confirmation, privacy requests and the store's new-order emails can each use your own template instead of WooCommerce's or WordPress's text, in the customer's language, with WooCommerce's order table kept. Copies land in the order's history.
 - **Newsletters**: a subscriber list (checkout checkbox, My account, a sign-up popup and a shortcode), campaigns in the same layout with product cards, batched sending and one-click unsubscribe.
 - **Welcome code**: new subscribers get a welcome email with their own single-use code, e.g. 10% off the first order.
 - **Brave Popup**: keep your Brave popup designs; their forms can add subscribers here instead of to another newsletter service.
@@ -70,6 +71,7 @@ The layout is a full HTML document; `{content}` is where a template's body goes,
 - `stms_show_popup` (filter): show the sign-up popup on this page.
 - `stms_popup_wait_for` (filter): CSS selectors of cookie banners the popup waits for.
 - `stms_current_language` (filter): the visitor's language code.
+- `stms_user_language` (filter): the language of an account email — `( string $lang, ?WP_User $user )`.
 - `POST /wp-json/stms/v1/subscribe` with `email`, optional `name`: subscribe from your own form.
 
 ## License

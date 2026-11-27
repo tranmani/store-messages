@@ -242,7 +242,13 @@ class Admin {
 				<a class="stms-card stms-template" href="<?php echo esc_url( self::url( 'templates', [ 'edit' => $id ] ) ); ?>">
 					<span class="stms-template__head">
 						<strong><?php echo esc_html( $tpl['name'] ); ?></strong>
-						<?php if ( ! empty( $tpl['system'] ) ) : ?>
+						<?php if ( ! empty( $tpl['auto'] ) ) : ?>
+							<?php if ( \StoreMessages\Auto_Emails::enabled( $id ) ) : ?>
+								<span class="stms-pill stms-pill--accent"><?php esc_html_e( 'Automatic', 'store-messages' ); ?></span>
+							<?php else : ?>
+								<span class="stms-pill stms-pill--off"><?php esc_html_e( 'Off', 'store-messages' ); ?></span>
+							<?php endif; ?>
+						<?php elseif ( ! empty( $tpl['system'] ) ) : ?>
 							<span class="stms-pill stms-pill--accent"><?php esc_html_e( 'Automatic', 'store-messages' ); ?></span>
 						<?php elseif ( empty( $tpl['builtin'] ) ) : ?>
 							<span class="stms-pill stms-pill--ok"><?php esc_html_e( 'Yours', 'store-messages' ); ?></span>
@@ -287,6 +293,16 @@ class Admin {
 						<p class="stms-callout"><?php echo wp_kses_post( sprintf( __( 'Sent once to every new subscriber (switch it on or off, and set the code, on the %s tab). {coupon_code} creates their personal code; the preview shows a sample one.', 'store-messages' ), '<a href="' . esc_url( self::url( 'signup' ) ) . '">' . esc_html__( 'Sign-up', 'store-messages' ) . '</a>' ) ); ?></p>
 					<?php elseif ( 'confirm_subscription' === $id ) : ?>
 						<p class="stms-callout"><?php esc_html_e( 'Sent when double opt-in is on (Sign-up tab). {confirm_url} is the link that confirms the subscription.', 'store-messages' ); ?></p>
+					<?php elseif ( ! empty( $tpl['auto'] ) ) : ?>
+						<p class="stms-callout">
+							<?php echo esc_html( sprintf( /* translators: %s: email names */ __( 'Replaces the text of: %s.', 'store-messages' ), implode( ', ', \StoreMessages\Auto_Emails::replaces( $tpl ) ) ) ); ?>
+							<?php if ( \StoreMessages\Auto_Emails::enabled( $id ) ) : ?>
+								<?php esc_html_e( 'It is switched on: this is what is sent.', 'store-messages' ); ?>
+							<?php else : ?>
+								<strong><?php esc_html_e( 'It is switched off: the original wording is sent.', 'store-messages' ); ?></strong>
+							<?php endif; ?>
+							<a href="<?php echo esc_url( self::url( 'settings' ) . '#stms-auto-emails' ); ?>"><?php esc_html_e( 'Change on the Settings tab', 'store-messages' ); ?></a>
+						</p>
 					<?php endif; ?>
 					<div class="stms-row">
 						<div class="stms-field">
@@ -495,6 +511,23 @@ class Admin {
 
 	/* ----------------------------------------------------------- settings -- */
 
+	/** Settings card: which automatic templates replace WooCommerce's and WordPress's own text. */
+	private static function auto_emails_card( array $s ) {
+		$on = (array) $s['auto_emails'];
+		?>
+		<div class="stms-card" id="stms-auto-emails">
+			<h2><?php esc_html_e( 'Automatic emails', 'store-messages' ); ?></h2>
+			<p class="stms-hint"><?php esc_html_e( 'Use your own text for the emails WooCommerce and WordPress send by themselves, in the language the customer ordered in. Each one is a template you can edit on the Templates tab; sent copies appear in the order’s message history. Switched off, an email keeps WooCommerce’s or WordPress’s wording.', 'store-messages' ); ?></p>
+			<div class="stms-field stms-switches">
+				<?php foreach ( Templates::all() as $id => $tpl ) : ?>
+					<?php if ( empty( $tpl['auto'] ) ) { continue; } ?>
+					<label><input type="checkbox" name="auto_emails[]" value="<?php echo esc_attr( $id ); ?>" <?php checked( in_array( $id, $on, true ) ); ?>> <span><strong><?php echo esc_html( $tpl['name'] ); ?></strong> · <a href="<?php echo esc_url( self::url( 'templates', [ 'edit' => $id ] ) ); ?>"><?php esc_html_e( 'Edit', 'store-messages' ); ?></a><br><span class="stms-muted"><?php echo esc_html( sprintf( /* translators: %s: email names */ __( 'Replaces: %s', 'store-messages' ), implode( ', ', \StoreMessages\Auto_Emails::replaces( $tpl ) ) ) ); ?></span></span></label>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
 	public static function tab_settings() {
 		$s = stms_settings();
 		?>
@@ -534,6 +567,7 @@ class Admin {
 					<label><input type="checkbox" name="style_wp_emails" value="1" <?php checked( ! empty( $s['style_wp_emails'] ) ); ?>> <span><strong><?php esc_html_e( 'WordPress emails', 'store-messages' ); ?></strong><br><span class="stms-muted"><?php esc_html_e( 'Plain-text emails such as password reset, new user and email address change. Emails another plugin already sends as HTML are left alone.', 'store-messages' ); ?></span></span></label>
 				</div>
 			</div>
+			<?php self::auto_emails_card( $s ); ?>
 			<div class="stms-card">
 				<h2><?php esc_html_e( 'Updates', 'store-messages' ); ?></h2>
 				<div class="stms-field stms-switches">
@@ -666,6 +700,7 @@ class Admin {
 					'show_tracking'  => empty( $post['show_tracking'] ) ? 0 : 1,
 					'style_wc_emails' => empty( $post['style_wc_emails'] ) ? 0 : 1,
 					'style_wp_emails' => empty( $post['style_wp_emails'] ) ? 0 : 1,
+					'auto_emails'     => array_values( array_intersect( array_map( 'sanitize_key', (array) ( $post['auto_emails'] ?? [] ) ), array_keys( array_filter( Templates::all(), static fn( $t ) => ! empty( $t['auto'] ) ) ) ) ),
 					'review_url'     => esc_url_raw( $post['review_url'] ?? '' ),
 					'updates'        => empty( $post['updates'] ) ? 0 : 1,
 				] );
@@ -761,7 +796,8 @@ class Admin {
 
 	private static function request_mail( array $req ) {
 		if ( isset( $req['body'] ) ) {
-			$tpl = self::template_from_post( $req );
+			$saved = Templates::get( sanitize_key( $req['id'] ?? ( $req['template'] ?? '' ) ) ) ?: [];
+			$tpl   = array_merge( array_intersect_key( $saved, array_flip( [ 'system', 'auto', 'woo', 'wp', 'store' ] ) ), self::template_from_post( $req ) );
 		} else {
 			$tpl = Templates::get( sanitize_key( $req['template'] ?? '' ) ) ?: [];
 		}
@@ -772,7 +808,10 @@ class Admin {
 		if ( isset( $req['message'] ) ) {
 			$extra['message'] = wp_kses_post( $req['message'] );
 		}
-		if ( ! empty( $tpl['system'] ) || ( isset( $req['body'] ) && false !== strpos( (string) $req['body'], '{note}' ) ) ) {
+		if ( ! empty( $tpl['auto'] ) || ( isset( $req['body'] ) && preg_match( '/\{(reset_url|set_password_url|user_login|new_email|download_url)\}/', (string) $req['body'] ) ) ) {
+			$extra['vars'] = \StoreMessages\Auto_Emails::sample_vars();
+		}
+		if ( ( ! empty( $tpl['system'] ) && empty( $tpl['auto'] ) ) || ( isset( $req['body'] ) && false !== strpos( (string) $req['body'], '{note}' ) ) ) {
 			$extra['note'] = __( 'Hi Alex, you can track your package using this link.', 'store-messages' );
 		}
 		$order = wc_get_order( absint( $req['order'] ?? 0 ) ) ?: null;

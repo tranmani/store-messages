@@ -5,7 +5,7 @@ Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 8.1
 Requires Plugins: woocommerce
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,13 @@ Yes. Administrators keep their HTML exactly as written; other users are limited 
 Use the `stms_update_repository` filter, or turn update checks off on the Settings tab.
 
 == Changelog ==
+
+= 1.4.0 =
+* Automatic emails: WooCommerce's and WordPress's own emails can use your own text, each as a template on the Templates tab, switched on per email on the Settings tab. Covers order received, on hold, complete (with the tracking link), refunded (full and partial, with the amount and reason of that refund), payment failed, cancelled, order details / invoice, password reset, new account, email confirmation, password and email address changed, privacy requests, and the new order / cancelled / failed emails to the store.
+* They go out in the language the customer ordered in (account emails: the language of the page the customer is on, else of their latest order) and keep WooCommerce's order table, payment instructions, addresses and attachments. Store emails stay in the store's language.
+* Copies of the automatic emails to customers appear in the order's message history with a Preview, like messages sent from the order screen.
+* New placeholders: {order_details}, {customer_details}, {refund_total}, {partial_refund}, {needs_payment}, and account values ({user_login}, {reset_url}, {set_password_url}, {login_url}, {new_email}, {request_type}, {download_url}, {expires_date}, {privacy_policy_url}).
+* An email whose template fails to build is sent with WooCommerce's own text instead.
 
 = 1.3.0 =
 * Every message in an order's "Sent from here" history has a Preview button that opens the email in the preview window. New sends keep a copy of the exact email (compressed, the last 20 per order); messages sent before 1.3.0 are rebuilt from their template with the tracking link that was sent, and the preview says so.

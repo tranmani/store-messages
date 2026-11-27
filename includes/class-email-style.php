@@ -222,6 +222,12 @@ CSS;
 		return ! preg_match( '/<(html|body|table|div|p|br|a)\b/i', (string) $atts['message'] );
 	}
 
+	/** Give the HTML email that is about to be sent this plain-text part. */
+	public static function queue_alt( $html, $text ) {
+		self::$alt = [ md5( (string) $html ), (string) $text ];
+		add_action( 'phpmailer_init', [ __CLASS__, 'alt_body' ], 1001 );
+	}
+
 	public static function alt_body( $phpmailer ) {
 		remove_action( 'phpmailer_init', [ __CLASS__, 'alt_body' ], 1001 );
 		// Only the email we wrapped: another plugin may have stopped it before PHPMailer.

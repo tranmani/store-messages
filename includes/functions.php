@@ -22,6 +22,7 @@ function stms_default_settings() {
 		'show_tracking'    => 1,   // show tracking on My account → Orders and in WooCommerce emails
 		'style_wc_emails'  => 1,   // WooCommerce's own emails use the layout
 		'style_wp_emails'  => 1,   // WordPress's plain-text emails use the layout
+		'auto_emails'      => [],  // automatic templates that replace WooCommerce's / WordPress's own text (template ids)
 		'review_url'       => '',
 		'brand'            => [
 			'logo'       => '',

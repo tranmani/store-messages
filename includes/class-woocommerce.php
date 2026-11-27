@@ -65,7 +65,7 @@ class WooCommerce {
 
 	public static function email_tracking( $order, $sent_to_admin, $plain_text, $email = null ) {
 		$tracking = $order instanceof \WC_Order ? Tracking::get( $order ) : null;
-		if ( $sent_to_admin || ! $tracking || empty( $tracking['url'] ) ) {
+		if ( $sent_to_admin || Auto_Emails::$rendering || ! $tracking || empty( $tracking['url'] ) ) {
 			return;
 		}
 		if ( $plain_text ) {

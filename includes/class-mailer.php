@@ -37,7 +37,7 @@ class Mailer {
 	public static function send( $order, $template, array $args = [] ) {
 		$test = ! empty( $args['test'] );
 		$to   = sanitize_email( $args['to'] ?? ( $order ? $order->get_billing_email() : '' ) );
-		$extra = array_intersect_key( $args, array_flip( [ 'tracking', 'message', 'note' ] ) );
+		$extra = array_intersect_key( $args, array_flip( [ 'tracking', 'message', 'note', 'vars', 'partial_refund' ] ) );
 		$built = self::build( $order, $template, $extra );
 		if ( ! $built ) {
 			return new \WP_Error( 'stms_template', __( 'That template no longer exists.', 'store-messages' ) );
@@ -93,19 +93,34 @@ class Mailer {
 	 *
 	 * @param \WC_Order|null $order    The order (null: sample data, store language).
 	 * @param string|array   $template Template id, or a template array (editor previews).
-	 * @param array          $extra    tracking, message, note.
+	 * @param array          $extra    tracking, message, note; for automatic emails also vars (extra placeholder
+	 *                                 values), refund, partial_refund, wc_email, lang (overrides the order's) and
+	 *                                 live (real values even without an order, not sample data).
 	 * @param string|null    $layout   Layout HTML; defaults to the saved layout.
 	 * @return array|null [template, context, mail], or null when the template does not exist.
 	 */
 	public static function build( $order, $template, array $extra = [], $layout = null ) {
-		$lang = Language::for_order( $order );
+		if ( ! array_key_exists( 'lang', $extra ) ) {
+			// Emails to the store are in the store's language, not the customer's.
+			$known = is_array( $template ) ? $template : ( Templates::all()[ (string) $template ] ?? [] );
+			if ( ! empty( $known['store'] ) ) {
+				$extra['lang'] = '';
+			}
+		}
+		$lang = array_key_exists( 'lang', $extra ) ? (string) $extra['lang'] : Language::for_order( $order );
 		return Language::run( $lang, static function () use ( $order, $template, $extra, $layout, $lang ) {
 			// Looked up inside run() so built-in templates come out in the customer's language.
 			$tpl = is_array( $template ) ? $template : Templates::get( $template );
 			if ( ! $tpl ) {
 				return null;
 			}
-			$ctx          = $order ? Renderer::context( $order, $extra ) : Renderer::sample_context( $extra );
+			$ctx = $order || ! empty( $extra['live'] ) ? Renderer::context( $order, $extra ) : Renderer::sample_context( $extra );
+			if ( $order && preg_match( '/\{(order|customer)_details\}/', (string) ( $tpl['body'] ?? '' ) ) ) {
+				// WooCommerce's own blocks, rendered in the customer's language. Previews use the email the template replaces.
+				$woo   = array_values( (array) ( $tpl['woo'] ?? [] ) );
+				$email = $extra['wc_email'] ?? Auto_Emails::woo_email( (string) ( $woo[0] ?? 'customer_invoice' ) );
+				$ctx   = array_merge( $ctx, Auto_Emails::order_blocks( $order, $email ) );
+			}
 			$mail         = Renderer::render( Language::translate_template( $tpl, $lang ), $ctx, $layout );
 			$mail['html'] = Language::translate_html( $mail['html'], $lang );
 			return [ $tpl, $ctx, $mail ];
@@ -142,18 +157,25 @@ class Mailer {
 		return self::failure_text();
 	}
 
+	/** Record an email sent by someone else (WooCommerce) in the order's history and Activity, without an order note. */
+	public static function log( \WC_Order $order, array $mail, array $entry ) {
+		self::record( $order, $mail, $entry + [ 'id' => wp_generate_password( 12, false ) ], false );
+	}
+
 	/** Private order note, the order's history, and the store-wide Activity list. */
-	private static function record( \WC_Order $order, array $mail, array $entry ) {
+	private static function record( \WC_Order $order, array $mail, array $entry, $note = true ) {
 		$entry += [ 'time' => time(), 'user' => get_current_user_id() ];
-		$note    = $entry['ok']
+		$text    = $entry['ok']
 			/* translators: 1: email subject, 2: email address */
 			? sprintf( __( 'Store Messages: “%1$s” emailed to %2$s.', 'store-messages' ), $entry['subject'], $entry['to'] )
 			/* translators: 1: email subject, 2: error */
 			: sprintf( __( 'Store Messages: “%1$s” could not be sent (%2$s).', 'store-messages' ), $entry['subject'], $entry['error'] );
 		if ( $entry['tracking'] ) {
-			$note .= ' ' . __( 'Tracking:', 'store-messages' ) . ' ' . $entry['tracking'];
+			$text .= ' ' . __( 'Tracking:', 'store-messages' ) . ' ' . $entry['tracking'];
 		}
-		$order->add_order_note( $note, 0, (bool) $entry['user'] );
+		if ( $note ) {
+			$order->add_order_note( $text, 0, (bool) $entry['user'] );
+		}
 
 		$log   = (array) $order->get_meta( self::LOG );
 		$log[] = $entry;

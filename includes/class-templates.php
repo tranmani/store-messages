@@ -45,6 +45,7 @@ HTML;
 		) . "{/if}\n";
 		$items = "\n" . '<h3 style="margin:28px 0 8px;font-size:15px">' . __( 'Your order', 'store-messages' ) . "</h3>\n{order_items}\n";
 
+		$auto = Auto_Emails::defaults( $p, $sign, $button, $tracking );
 		return [
 			'shipped' => [
 				'name'        => __( 'Order shipped (tracking)', 'store-messages' ),
@@ -194,7 +195,7 @@ HTML;
 				'system'      => true,
 				'marketing'   => true,
 			],
-		];
+		] + $auto;
 	}
 
 	/** All templates: saved ones (in their saved order) plus any built-in not yet saved. */

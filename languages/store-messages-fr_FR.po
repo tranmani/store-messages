@@ -215,3 +215,279 @@ msgstr "Des questions ? Répondez simplement à cet e-mail."
 
 msgid "Unsubscribe"
 msgstr "Se désinscrire"
+
+msgid "Your {site_name} order #{order_number} has been received"
+msgstr "Votre commande #{order_number} chez {site_name} a bien été reçue"
+
+msgid "Thank you for your order"
+msgstr "Merci pour votre commande"
+
+msgid "We have received your order and are getting it ready."
+msgstr "Nous avons bien reçu votre commande et nous la préparons."
+
+msgid "We have received your order <strong>#{order_number}</strong> and are now getting it ready. We will let you know as soon as it is on its way."
+msgstr "Nous avons bien reçu votre commande <strong>#{order_number}</strong> et nous la préparons. Nous vous informerons dès qu’elle sera en route."
+
+msgid "Your order is on hold until we receive your payment."
+msgstr "Votre commande est en attente de votre paiement."
+
+msgid "Thank you for your order <strong>#{order_number}</strong>. It is on hold until we confirm that your payment has been received."
+msgstr "Merci pour votre commande <strong>#{order_number}</strong>. Elle est en attente jusqu’à la confirmation de la réception de votre paiement."
+
+msgid "Your {site_name} order #{order_number} is complete"
+msgstr "Votre commande #{order_number} chez {site_name} est terminée"
+
+msgid "Your order is complete"
+msgstr "Votre commande est terminée"
+
+msgid "We have finished processing your order."
+msgstr "Nous avons fini de traiter votre commande."
+
+msgid "We have finished processing your order <strong>#{order_number}</strong>."
+msgstr "Nous avons fini de traiter votre commande <strong>#{order_number}</strong>."
+
+msgid "Your {site_name} order #{order_number} has been partially refunded"
+msgstr "Votre commande #{order_number} chez {site_name} a été partiellement remboursée"
+
+msgid "Your {site_name} order #{order_number} has been refunded"
+msgstr "Votre commande #{order_number} chez {site_name} a été remboursée"
+
+msgid "Partial refund issued"
+msgstr "Remboursement partiel effectué"
+
+msgid "Your order has been refunded"
+msgstr "Votre commande a été remboursée"
+
+msgid "We have refunded <strong>{refund_amount}</strong> of your order <strong>#{order_number}</strong>."
+msgstr "Nous vous avons remboursé <strong>{refund_amount}</strong> sur votre commande <strong>#{order_number}</strong>."
+
+msgid "Your order <strong>#{order_number}</strong> has been refunded in full: <strong>{refund_amount}</strong>."
+msgstr "Votre commande <strong>#{order_number}</strong> a été entièrement remboursée : <strong>{refund_amount}</strong>."
+
+msgid "The money goes back to your original payment method. It can take a few business days to appear on your statement."
+msgstr "Le montant est recrédité sur votre moyen de paiement d’origine. Il peut s’écouler quelques jours ouvrables avant qu’il n’apparaisse sur votre relevé."
+
+msgid "Your {site_name} order #{order_number} was unsuccessful"
+msgstr "Votre commande #{order_number} chez {site_name} n’a pas abouti"
+
+msgid "Your payment did not go through"
+msgstr "Votre paiement n’a pas abouti"
+
+msgid "You can try again with another payment method."
+msgstr "Vous pouvez réessayer avec un autre moyen de paiement."
+
+msgid "Unfortunately, we could not complete your order <strong>#{order_number}</strong> because of a problem with the payment."
+msgstr "Malheureusement, nous n’avons pas pu finaliser votre commande <strong>#{order_number}</strong> en raison d’un problème de paiement."
+
+msgid "If you would still like to place it, you can pay again, with another payment method if you like."
+msgstr "Si vous souhaitez toujours la passer, vous pouvez payer à nouveau, avec un autre moyen de paiement si vous le souhaitez."
+
+msgid "Pay for this order"
+msgstr "Payer cette commande"
+
+msgid "Your {site_name} order #{order_number} has been cancelled"
+msgstr "Votre commande #{order_number} chez {site_name} a été annulée"
+
+msgid "Your order has been cancelled"
+msgstr "Votre commande a été annulée"
+
+msgid "Order #{order_number} has been cancelled."
+msgstr "La commande #{order_number} a été annulée."
+
+msgid "We are writing to let you know that your order <strong>#{order_number}</strong> has been cancelled."
+msgstr "Nous vous informons que votre commande <strong>#{order_number}</strong> a été annulée."
+
+msgid "Invoice for order #{order_number} at {site_name}"
+msgstr "Facture de la commande #{order_number} chez {site_name}"
+
+msgid "Details of your order #{order_number}"
+msgstr "Détails de votre commande #{order_number}"
+
+msgid "Your invoice"
+msgstr "Votre facture"
+
+msgid "Your order details"
+msgstr "Les détails de votre commande"
+
+msgid "Order #{order_number} · {order_total}"
+msgstr "Commande #{order_number} · {order_total}"
+
+msgid "An order has been created for you at {site_name}. You can pay for it with the button below."
+msgstr "Une commande a été créée pour vous chez {site_name}. Vous pouvez la régler avec le bouton ci-dessous."
+
+msgid "Here are the details of your order <strong>#{order_number}</strong>, placed on {order_date}."
+msgstr "Voici les détails de votre commande <strong>#{order_number}</strong>, passée le {order_date}."
+
+msgid "Reset your {site_name} password"
+msgstr "Réinitialisez votre mot de passe {site_name}"
+
+msgid "Reset your password"
+msgstr "Réinitialisez votre mot de passe"
+
+msgid "Someone asked for a new password for your account."
+msgstr "Quelqu’un a demandé un nouveau mot de passe pour votre compte."
+
+msgid "Someone asked for a new password for the account <strong>{user_login}</strong> at {site_name}."
+msgstr "Quelqu’un a demandé un nouveau mot de passe pour le compte <strong>{user_login}</strong> chez {site_name}."
+
+msgid "Choose a new password"
+msgstr "Choisir un nouveau mot de passe"
+
+msgid "If you did not ask for this, simply ignore this email: your password stays the same."
+msgstr "Si vous n’êtes pas à l’origine de cette demande, ignorez simplement cet e-mail : votre mot de passe reste inchangé."
+
+msgid "Your account at {site_name} has been created"
+msgstr "Votre compte chez {site_name} a été créé"
+
+msgid "Welcome to {site_name}"
+msgstr "Bienvenue chez {site_name}"
+
+msgid "Your account is ready."
+msgstr "Votre compte est prêt."
+
+msgid "Thank you for creating an account at {site_name}. Your username is <strong>{user_login}</strong>."
+msgstr "Merci d’avoir créé un compte chez {site_name}. Votre nom d’utilisateur est <strong>{user_login}</strong>."
+
+msgid "Choose your password with the button below to start using your account."
+msgstr "Choisissez votre mot de passe avec le bouton ci-dessous pour commencer à utiliser votre compte."
+
+msgid "Choose your password"
+msgstr "Choisir mon mot de passe"
+
+msgid "In your account you can see your orders, change your addresses and your password."
+msgstr "Dans votre compte, vous pouvez consulter vos commandes, modifier vos adresses et votre mot de passe."
+
+msgid "Go to my account"
+msgstr "Accéder à mon compte"
+
+msgid "Confirm your email address for {site_name}"
+msgstr "Confirmez votre adresse e-mail pour {site_name}"
+
+msgid "Confirm your email address"
+msgstr "Confirmez votre adresse e-mail"
+
+msgid "One click to link your past orders to your account."
+msgstr "Un clic pour relier vos commandes passées à votre compte."
+
+msgid "Please confirm that <strong>{customer_email}</strong> is your email address. Orders you placed with it as a guest will then appear in your account."
+msgstr "Veuillez confirmer que <strong>{customer_email}</strong> est bien votre adresse e-mail. Les commandes passées avec cette adresse en tant qu’invité apparaîtront alors dans votre compte."
+
+msgid "Confirm email address"
+msgstr "Confirmer l’adresse e-mail"
+
+msgid "If you did not ask for this, simply ignore this email."
+msgstr "Si vous n’êtes pas à l’origine de cette demande, ignorez simplement cet e-mail."
+
+msgid "Your {site_name} password was changed"
+msgstr "Votre mot de passe {site_name} a été modifié"
+
+msgid "Your password was changed"
+msgstr "Votre mot de passe a été modifié"
+
+msgid "A confirmation for your security."
+msgstr "Une confirmation pour votre sécurité."
+
+msgid "This is a confirmation that the password of your account <strong>{user_login}</strong> at {site_name} was just changed."
+msgstr "Nous vous confirmons que le mot de passe de votre compte <strong>{user_login}</strong> chez {site_name} vient d’être modifié."
+
+msgid "If you did not change it, please contact us right away at {store_email}."
+msgstr "Si vous n’êtes pas à l’origine de cette modification, contactez-nous sans attendre à l’adresse {store_email}."
+
+msgid "Your {site_name} email address was changed"
+msgstr "Votre adresse e-mail {site_name} a été modifiée"
+
+msgid "Your email address was changed"
+msgstr "Votre adresse e-mail a été modifiée"
+
+msgid "This is a confirmation that the email address of your account at {site_name} was changed to <strong>{new_email}</strong>."
+msgstr "Nous vous confirmons que l’adresse e-mail de votre compte chez {site_name} a été remplacée par <strong>{new_email}</strong>."
+
+msgid "Confirm your new email address for {site_name}"
+msgstr "Confirmez votre nouvelle adresse e-mail pour {site_name}"
+
+msgid "Confirm your new email address"
+msgstr "Confirmez votre nouvelle adresse e-mail"
+
+msgid "One click to confirm your new address."
+msgstr "Un clic pour confirmer votre nouvelle adresse."
+
+msgid "You asked to change the email address of your account at {site_name} to <strong>{new_email}</strong>. Please confirm it with the button below."
+msgstr "Vous avez demandé à remplacer l’adresse e-mail de votre compte chez {site_name} par <strong>{new_email}</strong>. Veuillez la confirmer avec le bouton ci-dessous."
+
+msgid "Confirm new email address"
+msgstr "Confirmer la nouvelle adresse e-mail"
+
+msgid "Please confirm your request: {request_type}"
+msgstr "Veuillez confirmer votre demande : {request_type}"
+
+msgid "Please confirm your request"
+msgstr "Veuillez confirmer votre demande"
+
+msgid "We received a request to do the following with your personal data at {site_name}: <strong>{request_type}</strong>."
+msgstr "Nous avons reçu une demande concernant vos données personnelles chez {site_name} : <strong>{request_type}</strong>."
+
+msgid "Confirm request"
+msgstr "Confirmer la demande"
+
+msgid "Your personal data from {site_name}"
+msgstr "Vos données personnelles de {site_name}"
+
+msgid "Your personal data is ready"
+msgstr "Vos données personnelles sont prêtes"
+
+msgid "Download it before {expires_date}."
+msgstr "Téléchargez-les avant le {expires_date}."
+
+msgid "The export of your personal data you asked for is ready."
+msgstr "L’export de vos données personnelles que vous avez demandé est prêt."
+
+msgid "Download your data"
+msgstr "Télécharger mes données"
+
+msgid "For your privacy, the link works until {expires_date}."
+msgstr "Pour votre sécurité, le lien est valable jusqu’au {expires_date}."
+
+msgid "Your personal data at {site_name} has been erased"
+msgstr "Vos données personnelles chez {site_name} ont été effacées"
+
+msgid "Your request is complete"
+msgstr "Votre demande a été traitée"
+
+msgid "We have erased your personal data."
+msgstr "Nous avons effacé vos données personnelles."
+
+msgid "Your request to erase your personal data at {site_name} has been carried out."
+msgstr "Votre demande d’effacement de vos données personnelles chez {site_name} a été exécutée."
+
+msgid "You can read more about how we handle personal data in our <a href=\"{privacy_policy_url}\">privacy policy</a>."
+msgstr "Pour en savoir plus sur la façon dont nous traitons les données personnelles, consultez notre <a href=\"{privacy_policy_url}\">politique de confidentialité</a>."
+
+msgid "[{site_name}] New order #{order_number}"
+msgstr "[{site_name}] Nouvelle commande #{order_number}"
+
+msgid "New order #{order_number}"
+msgstr "Nouvelle commande #{order_number}"
+
+msgid "{customer_name} · {order_total}"
+msgstr "{customer_name} · {order_total}"
+
+msgid "You have received a new order from <strong>{customer_name}</strong>."
+msgstr "Vous avez reçu une nouvelle commande de <strong>{customer_name}</strong>."
+
+msgid "[{site_name}] Order #{order_number} has been cancelled"
+msgstr "[{site_name}] La commande #{order_number} a été annulée"
+
+msgid "Order cancelled: #{order_number}"
+msgstr "Commande annulée : #{order_number}"
+
+msgid "Order <strong>#{order_number}</strong> from {customer_name} has been cancelled."
+msgstr "La commande <strong>#{order_number}</strong> de {customer_name} a été annulée."
+
+msgid "[{site_name}] Payment failed for order #{order_number}"
+msgstr "[{site_name}] Échec du paiement de la commande #{order_number}"
+
+msgid "Payment failed: #{order_number}"
+msgstr "Échec du paiement : #{order_number}"
+
+msgid "The payment for order <strong>#{order_number}</strong> from {customer_name} failed. The order was:"
+msgstr "Le paiement de la commande <strong>#{order_number}</strong> de {customer_name} a échoué. La commande contenait :"

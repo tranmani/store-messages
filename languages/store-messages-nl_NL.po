@@ -215,3 +215,279 @@ msgstr "Vragen? Beantwoord gewoon deze e-mail."
 
 msgid "Unsubscribe"
 msgstr "Uitschrijven"
+
+msgid "Your {site_name} order #{order_number} has been received"
+msgstr "We hebben je bestelling #{order_number} bij {site_name} ontvangen"
+
+msgid "Thank you for your order"
+msgstr "Bedankt voor je bestelling"
+
+msgid "We have received your order and are getting it ready."
+msgstr "We hebben je bestelling ontvangen en maken hem klaar."
+
+msgid "We have received your order <strong>#{order_number}</strong> and are now getting it ready. We will let you know as soon as it is on its way."
+msgstr "We hebben je bestelling <strong>#{order_number}</strong> ontvangen en maken hem nu klaar. Je hoort van ons zodra hij onderweg is."
+
+msgid "Your order is on hold until we receive your payment."
+msgstr "Je bestelling staat in de wacht tot we je betaling ontvangen."
+
+msgid "Thank you for your order <strong>#{order_number}</strong>. It is on hold until we confirm that your payment has been received."
+msgstr "Bedankt voor je bestelling <strong>#{order_number}</strong>. Hij staat in de wacht tot we bevestigen dat je betaling is ontvangen."
+
+msgid "Your {site_name} order #{order_number} is complete"
+msgstr "Je bestelling #{order_number} bij {site_name} is voltooid"
+
+msgid "Your order is complete"
+msgstr "Je bestelling is voltooid"
+
+msgid "We have finished processing your order."
+msgstr "We hebben de verwerking van je bestelling afgerond."
+
+msgid "We have finished processing your order <strong>#{order_number}</strong>."
+msgstr "We hebben de verwerking van je bestelling <strong>#{order_number}</strong> afgerond."
+
+msgid "Your {site_name} order #{order_number} has been partially refunded"
+msgstr "Je bestelling #{order_number} bij {site_name} is gedeeltelijk terugbetaald"
+
+msgid "Your {site_name} order #{order_number} has been refunded"
+msgstr "Je bestelling #{order_number} bij {site_name} is terugbetaald"
+
+msgid "Partial refund issued"
+msgstr "Gedeeltelijke terugbetaling uitgevoerd"
+
+msgid "Your order has been refunded"
+msgstr "Je bestelling is terugbetaald"
+
+msgid "We have refunded <strong>{refund_amount}</strong> of your order <strong>#{order_number}</strong>."
+msgstr "We hebben <strong>{refund_amount}</strong> van je bestelling <strong>#{order_number}</strong> terugbetaald."
+
+msgid "Your order <strong>#{order_number}</strong> has been refunded in full: <strong>{refund_amount}</strong>."
+msgstr "Je bestelling <strong>#{order_number}</strong> is volledig terugbetaald: <strong>{refund_amount}</strong>."
+
+msgid "The money goes back to your original payment method. It can take a few business days to appear on your statement."
+msgstr "Het geld gaat terug naar je oorspronkelijke betaalmethode. Het kan een paar werkdagen duren voordat het op je afschrift verschijnt."
+
+msgid "Your {site_name} order #{order_number} was unsuccessful"
+msgstr "Je bestelling #{order_number} bij {site_name} is niet gelukt"
+
+msgid "Your payment did not go through"
+msgstr "Je betaling is niet gelukt"
+
+msgid "You can try again with another payment method."
+msgstr "Je kunt het opnieuw proberen met een andere betaalmethode."
+
+msgid "Unfortunately, we could not complete your order <strong>#{order_number}</strong> because of a problem with the payment."
+msgstr "Helaas konden we je bestelling <strong>#{order_number}</strong> niet afronden door een probleem met de betaling."
+
+msgid "If you would still like to place it, you can pay again, with another payment method if you like."
+msgstr "Wil je hem toch plaatsen? Dan kun je opnieuw betalen, eventueel met een andere betaalmethode."
+
+msgid "Pay for this order"
+msgstr "Deze bestelling betalen"
+
+msgid "Your {site_name} order #{order_number} has been cancelled"
+msgstr "Je bestelling #{order_number} bij {site_name} is geannuleerd"
+
+msgid "Your order has been cancelled"
+msgstr "Je bestelling is geannuleerd"
+
+msgid "Order #{order_number} has been cancelled."
+msgstr "Bestelling #{order_number} is geannuleerd."
+
+msgid "We are writing to let you know that your order <strong>#{order_number}</strong> has been cancelled."
+msgstr "We laten je weten dat je bestelling <strong>#{order_number}</strong> is geannuleerd."
+
+msgid "Invoice for order #{order_number} at {site_name}"
+msgstr "Factuur voor bestelling #{order_number} bij {site_name}"
+
+msgid "Details of your order #{order_number}"
+msgstr "Details van je bestelling #{order_number}"
+
+msgid "Your invoice"
+msgstr "Je factuur"
+
+msgid "Your order details"
+msgstr "Je bestelgegevens"
+
+msgid "Order #{order_number} · {order_total}"
+msgstr "Bestelling #{order_number} · {order_total}"
+
+msgid "An order has been created for you at {site_name}. You can pay for it with the button below."
+msgstr "Er is een bestelling voor je aangemaakt bij {site_name}. Je kunt hem betalen met de knop hieronder."
+
+msgid "Here are the details of your order <strong>#{order_number}</strong>, placed on {order_date}."
+msgstr "Hier zijn de gegevens van je bestelling <strong>#{order_number}</strong>, geplaatst op {order_date}."
+
+msgid "Reset your {site_name} password"
+msgstr "Stel je {site_name}-wachtwoord opnieuw in"
+
+msgid "Reset your password"
+msgstr "Stel je wachtwoord opnieuw in"
+
+msgid "Someone asked for a new password for your account."
+msgstr "Iemand heeft een nieuw wachtwoord voor je account aangevraagd."
+
+msgid "Someone asked for a new password for the account <strong>{user_login}</strong> at {site_name}."
+msgstr "Iemand heeft een nieuw wachtwoord aangevraagd voor het account <strong>{user_login}</strong> bij {site_name}."
+
+msgid "Choose a new password"
+msgstr "Kies een nieuw wachtwoord"
+
+msgid "If you did not ask for this, simply ignore this email: your password stays the same."
+msgstr "Heb je dit niet zelf gedaan? Negeer dan gewoon deze e-mail: je wachtwoord blijft hetzelfde."
+
+msgid "Your account at {site_name} has been created"
+msgstr "Je account bij {site_name} is aangemaakt"
+
+msgid "Welcome to {site_name}"
+msgstr "Welkom bij {site_name}"
+
+msgid "Your account is ready."
+msgstr "Je account is klaar."
+
+msgid "Thank you for creating an account at {site_name}. Your username is <strong>{user_login}</strong>."
+msgstr "Bedankt voor het aanmaken van een account bij {site_name}. Je gebruikersnaam is <strong>{user_login}</strong>."
+
+msgid "Choose your password with the button below to start using your account."
+msgstr "Kies je wachtwoord met de knop hieronder om je account te gebruiken."
+
+msgid "Choose your password"
+msgstr "Kies je wachtwoord"
+
+msgid "In your account you can see your orders, change your addresses and your password."
+msgstr "In je account zie je je bestellingen en kun je je adressen en wachtwoord wijzigen."
+
+msgid "Go to my account"
+msgstr "Naar mijn account"
+
+msgid "Confirm your email address for {site_name}"
+msgstr "Bevestig je e-mailadres voor {site_name}"
+
+msgid "Confirm your email address"
+msgstr "Bevestig je e-mailadres"
+
+msgid "One click to link your past orders to your account."
+msgstr "Eén klik om je eerdere bestellingen aan je account te koppelen."
+
+msgid "Please confirm that <strong>{customer_email}</strong> is your email address. Orders you placed with it as a guest will then appear in your account."
+msgstr "Bevestig dat <strong>{customer_email}</strong> je e-mailadres is. Bestellingen die je hiermee als gast hebt geplaatst, verschijnen dan in je account."
+
+msgid "Confirm email address"
+msgstr "E-mailadres bevestigen"
+
+msgid "If you did not ask for this, simply ignore this email."
+msgstr "Heb je dit niet zelf gedaan? Negeer dan gewoon deze e-mail."
+
+msgid "Your {site_name} password was changed"
+msgstr "Je {site_name}-wachtwoord is gewijzigd"
+
+msgid "Your password was changed"
+msgstr "Je wachtwoord is gewijzigd"
+
+msgid "A confirmation for your security."
+msgstr "Een bevestiging voor je veiligheid."
+
+msgid "This is a confirmation that the password of your account <strong>{user_login}</strong> at {site_name} was just changed."
+msgstr "Hierbij bevestigen we dat het wachtwoord van je account <strong>{user_login}</strong> bij {site_name} zojuist is gewijzigd."
+
+msgid "If you did not change it, please contact us right away at {store_email}."
+msgstr "Heb je het niet zelf gewijzigd? Neem dan direct contact met ons op via {store_email}."
+
+msgid "Your {site_name} email address was changed"
+msgstr "Je e-mailadres bij {site_name} is gewijzigd"
+
+msgid "Your email address was changed"
+msgstr "Je e-mailadres is gewijzigd"
+
+msgid "This is a confirmation that the email address of your account at {site_name} was changed to <strong>{new_email}</strong>."
+msgstr "Hierbij bevestigen we dat het e-mailadres van je account bij {site_name} is gewijzigd in <strong>{new_email}</strong>."
+
+msgid "Confirm your new email address for {site_name}"
+msgstr "Bevestig je nieuwe e-mailadres voor {site_name}"
+
+msgid "Confirm your new email address"
+msgstr "Bevestig je nieuwe e-mailadres"
+
+msgid "One click to confirm your new address."
+msgstr "Eén klik om je nieuwe adres te bevestigen."
+
+msgid "You asked to change the email address of your account at {site_name} to <strong>{new_email}</strong>. Please confirm it with the button below."
+msgstr "Je hebt gevraagd het e-mailadres van je account bij {site_name} te wijzigen in <strong>{new_email}</strong>. Bevestig het met de knop hieronder."
+
+msgid "Confirm new email address"
+msgstr "Nieuw e-mailadres bevestigen"
+
+msgid "Please confirm your request: {request_type}"
+msgstr "Bevestig je verzoek: {request_type}"
+
+msgid "Please confirm your request"
+msgstr "Bevestig je verzoek"
+
+msgid "We received a request to do the following with your personal data at {site_name}: <strong>{request_type}</strong>."
+msgstr "We hebben een verzoek ontvangen over je persoonsgegevens bij {site_name}: <strong>{request_type}</strong>."
+
+msgid "Confirm request"
+msgstr "Verzoek bevestigen"
+
+msgid "Your personal data from {site_name}"
+msgstr "Je persoonsgegevens van {site_name}"
+
+msgid "Your personal data is ready"
+msgstr "Je persoonsgegevens staan klaar"
+
+msgid "Download it before {expires_date}."
+msgstr "Download ze vóór {expires_date}."
+
+msgid "The export of your personal data you asked for is ready."
+msgstr "De export van je persoonsgegevens die je hebt aangevraagd staat klaar."
+
+msgid "Download your data"
+msgstr "Mijn gegevens downloaden"
+
+msgid "For your privacy, the link works until {expires_date}."
+msgstr "Voor je privacy werkt de link tot {expires_date}."
+
+msgid "Your personal data at {site_name} has been erased"
+msgstr "Je persoonsgegevens bij {site_name} zijn gewist"
+
+msgid "Your request is complete"
+msgstr "Je verzoek is afgehandeld"
+
+msgid "We have erased your personal data."
+msgstr "We hebben je persoonsgegevens gewist."
+
+msgid "Your request to erase your personal data at {site_name} has been carried out."
+msgstr "Je verzoek om je persoonsgegevens bij {site_name} te wissen is uitgevoerd."
+
+msgid "You can read more about how we handle personal data in our <a href=\"{privacy_policy_url}\">privacy policy</a>."
+msgstr "Meer over hoe we met persoonsgegevens omgaan lees je in ons <a href=\"{privacy_policy_url}\">privacybeleid</a>."
+
+msgid "[{site_name}] New order #{order_number}"
+msgstr "[{site_name}] Nieuwe bestelling #{order_number}"
+
+msgid "New order #{order_number}"
+msgstr "Nieuwe bestelling #{order_number}"
+
+msgid "{customer_name} · {order_total}"
+msgstr "{customer_name} · {order_total}"
+
+msgid "You have received a new order from <strong>{customer_name}</strong>."
+msgstr "Je hebt een nieuwe bestelling ontvangen van <strong>{customer_name}</strong>."
+
+msgid "[{site_name}] Order #{order_number} has been cancelled"
+msgstr "[{site_name}] Bestelling #{order_number} is geannuleerd"
+
+msgid "Order cancelled: #{order_number}"
+msgstr "Bestelling geannuleerd: #{order_number}"
+
+msgid "Order <strong>#{order_number}</strong> from {customer_name} has been cancelled."
+msgstr "Bestelling <strong>#{order_number}</strong> van {customer_name} is geannuleerd."
+
+msgid "[{site_name}] Payment failed for order #{order_number}"
+msgstr "[{site_name}] Betaling mislukt voor bestelling #{order_number}"
+
+msgid "Payment failed: #{order_number}"
+msgstr "Betaling mislukt: #{order_number}"
+
+msgid "The payment for order <strong>#{order_number}</strong> from {customer_name} failed. The order was:"
+msgstr "De betaling voor bestelling <strong>#{order_number}</strong> van {customer_name} is mislukt. De bestelling was:"

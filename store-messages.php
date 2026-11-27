@@ -3,7 +3,7 @@
  * Plugin Name:       Store Messages
  * Plugin URI:        https://github.com/tranmani/store-messages
  * Description:       Beautiful, customisable emails from your WooCommerce store to your customers: tracking links, pickup notices, refunds, delays and personal messages from the order screen, every WooCommerce email in the same layout, and newsletters to your subscribers. Templates and layout are plain HTML you control.
- * Version:           1.3.0
+ * Version:           1.4.0
  * Requires at least: 6.4
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce
@@ -16,7 +16,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'STMS_VERSION', '1.3.0' );
+define( 'STMS_VERSION', '1.4.0' );
 define( 'STMS_FILE', __FILE__ );
 define( 'STMS_DIR', __DIR__ );
 define( 'STMS_URL', plugin_dir_url( __FILE__ ) );
@@ -29,6 +29,7 @@ require_once STMS_DIR . '/includes/class-tracking.php';
 require_once STMS_DIR . '/includes/class-mailer.php';
 require_once STMS_DIR . '/includes/class-woocommerce.php';
 require_once STMS_DIR . '/includes/class-email-style.php';
+require_once STMS_DIR . '/includes/class-auto-emails.php';
 require_once STMS_DIR . '/includes/class-language.php';
 require_once STMS_DIR . '/includes/class-database.php';
 require_once STMS_DIR . '/includes/class-subscribers.php';
@@ -70,6 +71,7 @@ add_action( 'plugins_loaded', static function () {
 	StoreMessages\Database::maybe_install();
 	StoreMessages\WooCommerce::init();
 	StoreMessages\Email_Style::init();
+	StoreMessages\Auto_Emails::init();
 	StoreMessages\Subscribers::init();
 	StoreMessages\Coupons::init();
 	StoreMessages\Marketing::init();

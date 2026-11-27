@@ -40,6 +40,27 @@ class Language {
 		return isset( self::all()[ $lang ] ) ? $lang : '';
 	}
 
+	/**
+	 * Language for an email about an account: the language of the page the
+	 * customer is on (registering, asking for a new password), else the
+	 * language of their latest order, else their profile language.
+	 */
+	public static function for_user( $user ) {
+		$lang = '';
+		if ( ( ! is_admin() || wp_doing_ajax() ) && ! wp_doing_cron() && ! ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+			$lang = self::current();
+		}
+		if ( ( '' === $lang || ! isset( self::all()[ $lang ] ) ) && $user instanceof \WP_User ) {
+			$orders = function_exists( 'wc_get_orders' ) ? wc_get_orders( [ 'customer_id' => $user->ID, 'limit' => 1, 'orderby' => 'date', 'order' => 'DESC', 'type' => 'shop_order' ] ) : [];
+			$lang   = $orders ? self::for_order( $orders[0] ) : '';
+			if ( '' === $lang && $user->locale ) {
+				$lang = substr( (string) $user->locale, 0, 2 );
+			}
+		}
+		$lang = (string) apply_filters( 'stms_user_language', sanitize_key( $lang ), $user );
+		return isset( self::all()[ $lang ] ) ? $lang : '';
+	}
+
 	/** A template's one-line texts through the dictionary (built-in texts are already translated by run()). */
 	public static function translate_template( array $tpl, $lang ) {
 		foreach ( [ 'subject', 'heading', 'preheader' ] as $key ) {

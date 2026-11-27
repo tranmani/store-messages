@@ -18,10 +18,10 @@ defined( 'ABSPATH' ) || exit;
 class Renderer {
 
 	/** Placeholders whose value is already HTML (everything else is escaped). */
-	const HTML = [ 'order_items', 'message', 'note', 'shipping_address', 'billing_address', 'content', 'footer', 'bestsellers' ];
+	const HTML = [ 'order_items', 'message', 'note', 'shipping_address', 'billing_address', 'content', 'footer', 'bestsellers', 'order_details', 'customer_details' ];
 
 	/** Placeholders whose value is a URL. */
-	const URLS = [ 'tracking_url', 'order_url', 'payment_url', 'site_url', 'shop_url', 'account_url', 'review_url', 'logo', 'unsubscribe_url', 'confirm_url' ];
+	const URLS = [ 'tracking_url', 'order_url', 'payment_url', 'site_url', 'shop_url', 'account_url', 'review_url', 'logo', 'unsubscribe_url', 'confirm_url', 'reset_url', 'set_password_url', 'login_url', 'download_url', 'privacy_policy_url' ];
 
 	/** Documented placeholders: [name => description], shown next to the editors. */
 	public static function reference() {
@@ -43,8 +43,24 @@ class Renderer {
 				'shipping_method'  => __( 'Shipping method', 'store-messages' ),
 				'order_url'        => __( 'Order page in My account', 'store-messages' ),
 				'payment_url'      => __( 'Payment page for unpaid orders', 'store-messages' ),
-				'refund_amount'    => __( 'Total refunded', 'store-messages' ),
-				'refund_reason'    => __( 'Reason given for the latest refund', 'store-messages' ),
+				'refund_amount'    => __( 'Amount refunded (in a refund email: this refund)', 'store-messages' ),
+				'refund_reason'    => __( 'Reason given for the refund', 'store-messages' ),
+				'refund_total'     => __( 'Total refunded so far', 'store-messages' ),
+				'partial_refund'   => __( 'Set when a refund email is for part of the order: {if partial_refund}…{/if}', 'store-messages' ),
+				'needs_payment'    => __( 'Set while the order is unpaid: {if needs_payment}…{/if}', 'store-messages' ),
+				'order_details'    => __( 'WooCommerce’s order table with totals and payment instructions (HTML)', 'store-messages' ),
+				'customer_details' => __( 'WooCommerce’s customer details and addresses (HTML)', 'store-messages' ),
+			],
+			__( 'Account emails', 'store-messages' ) => [
+				'user_login'         => __( 'Username', 'store-messages' ),
+				'reset_url'          => __( 'Link to choose a new password', 'store-messages' ),
+				'set_password_url'   => __( 'Link to set the password of a new account', 'store-messages' ),
+				'login_url'          => __( 'Login page', 'store-messages' ),
+				'new_email'          => __( 'New email address', 'store-messages' ),
+				'request_type'       => __( 'Privacy request, e.g. Export Personal Data', 'store-messages' ),
+				'download_url'       => __( 'Personal data download link', 'store-messages' ),
+				'expires_date'       => __( 'Date the download link expires', 'store-messages' ),
+				'privacy_policy_url' => __( 'Privacy policy page', 'store-messages' ),
 			],
 			__( 'Shipping', 'store-messages' ) => [
 				'carrier'         => __( 'Carrier name', 'store-messages' ),
@@ -118,7 +134,19 @@ class Renderer {
 				'payment_url'      => $order->get_checkout_payment_url(),
 				'refund_amount'    => $refunded > 0 ? wp_strip_all_tags( html_entity_decode( wc_price( $refunded, [ 'currency' => $order->get_currency() ] ), ENT_QUOTES ) ) : '',
 				'refund_reason'    => $refunds ? (string) $refunds[0]->get_reason() : '',
+				'refund_total'     => $refunded > 0 ? wp_strip_all_tags( html_entity_decode( wc_price( $refunded, [ 'currency' => $order->get_currency() ] ), ENT_QUOTES ) ) : '',
+				'partial_refund'   => $refunded > 0 && $refunded < (float) $order->get_total() ? '1' : '',
+				'needs_payment'    => $order->needs_payment() ? '1' : '',
 			];
+			// A refund email is about one refund: its amount and reason.
+			$refund = $extra['refund'] ?? null;
+			if ( $refund instanceof \WC_Order_Refund ) {
+				$ctx['refund_amount'] = wp_strip_all_tags( html_entity_decode( wc_price( (float) $refund->get_amount(), [ 'currency' => $order->get_currency() ] ), ENT_QUOTES ) );
+				$ctx['refund_reason'] = (string) $refund->get_reason();
+			}
+			if ( isset( $extra['partial_refund'] ) ) {
+				$ctx['partial_refund'] = $extra['partial_refund'] ? '1' : '';
+			}
 			$saved = Tracking::get( $order );
 			if ( $saved && empty( $extra['tracking'] ) ) {
 				$extra['tracking'] = $saved;
@@ -131,6 +159,12 @@ class Renderer {
 		$ctx['message']         = self::format_text( $extra['message'] ?? '' );
 		$ctx['note']            = self::format_text( $extra['note'] ?? '' );
 		$ctx['note_excerpt']    = wp_html_excerpt( wp_strip_all_tags( (string) ( $extra['note'] ?? '' ) ), 110, '…' );
+		// Values of automatic emails (account links, the user's name when there is no order).
+		foreach ( (array) ( $extra['vars'] ?? [] ) as $key => $value ) {
+			if ( is_scalar( $value ) && preg_match( '/^[a-z0-9_]+$/', (string) $key ) ) {
+				$ctx[ $key ] = (string) $value;
+			}
+		}
 
 		/**
 		 * Add or change placeholder values. Keys are placeholder names without braces.
@@ -162,12 +196,17 @@ class Renderer {
 			'payment_url'      => $ctx['account_url'],
 			'refund_amount'    => wp_strip_all_tags( html_entity_decode( wc_price( 12 ), ENT_QUOTES ) ),
 			'refund_reason'    => __( 'Item out of stock', 'store-messages' ),
+			'refund_total'     => wp_strip_all_tags( html_entity_decode( wc_price( 12 ), ENT_QUOTES ) ),
+			'partial_refund'   => array_key_exists( 'partial_refund', $extra ) ? ( $extra['partial_refund'] ? '1' : '' ) : '1',
+			'needs_payment'    => '',
+			'order_details'    => self::items_table( null ),
+			'customer_details' => '',
 			'unsubscribe_url'  => $ctx['unsubscribe_url'] ?? '',
 			'confirm_url'      => $ctx['site_url'],
 			'coupon_code'      => 'ab3k-7xq2mz-p9tw',
 			'coupon_amount'    => Coupons::amount_text(),
 			'coupon_expires'   => Coupons::expiry_text( '' ),
-		] );
+		], Auto_Emails::sample_vars(), array_filter( (array) ( $extra['vars'] ?? [] ), 'is_scalar' ) );
 	}
 
 	/** Plain text → paragraphs with clickable links; simple HTML is kept. */
